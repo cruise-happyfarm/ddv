@@ -364,6 +364,75 @@
     padding-bottom: 2rem;
   }
 
+  .page-layout {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem 4rem;
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+main {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.sidebar {
+  position: sticky;
+  top: 1.5rem;
+}
+
+.sidebar-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1rem;
+}
+
+.sidebar-title {
+  font-size: 0.75rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 0.85rem;
+}
+
+.sidebar-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+}
+
+.sidebar-links a {
+  color: var(--green);
+  text-decoration: none;
+  font-weight: 500;
+  padding: 0.35rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.sidebar-links a:last-child {
+  border-bottom: none;
+}
+
+.sidebar-links a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 900px) {
+  .page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .sidebar {
+    position: static;
+  }
+}
+
   footer {
     text-align: center;
     padding: 1.5rem;
@@ -384,6 +453,19 @@
   <p>Ugemenuer baseret på De Danske Vægtkonsulenter's kostprogram fra 2009/2010</p>
   <span class="pill">Alle regler overholdes automatisk</span>
 </header>
+
+<div class="page-layout">
+  <aside class="sidebar">
+    <div class="sidebar-card">
+      <div class="sidebar-title">Nyttige links</div>
+      <nav class="sidebar-links">
+        <a href="https://carinas.dk/ddv/" target="_blank">DDV opskrifter</a>
+        <a href="https://carinas.dk/ddv/category/morgenmad/" target="_blank">Morgenmad</a>
+        <a href="https://carinas.dk/ddv/category/frokost/" target="_blank">Frokost</a>
+        <a href="https://carinas.dk/ddv/category/aftensmad/" target="_blank">Middag</a>
+      </nav>
+    </div>
+  </aside>
 
 <main>
   <div class="card">
