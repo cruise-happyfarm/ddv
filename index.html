@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="da">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DDV Menuplan-assistent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;600&family=Source+Sans+3:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --green: #1a6b4a;
+    --green-light: #2d9e72;
+    --green-pale: #e8f5ef;
+    --green-mid: #c2e4d4;
+    --amber: #c17f2a;
+    --amber-pale: #fdf3e3;
+    --blue-pale: #e8f0f8;
+    --blue: #2a5c8a;
+    --text: #1c2420;
+    --text-mid: #4a5c54;
+    --text-light: #7a8c84;
+    --bg: #f7f5f0;
+    --white: #ffffff;
+    --border: #ddd8d0;
+    --radius: 10px;
+    --radius-lg: 16px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 400;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    line-height: 1.6;
+  }
+
+  header {
+    background: var(--green);
+    color: white;
+    padding: 2.5rem 1.5rem 2rem;
+    text-align: center;
+  }
+
+  header h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.8rem, 5vw, 2.8rem);
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.5rem;
+  }
+
+  header p {
+    font-size: 1rem;
+    opacity: 0.8;
+    font-weight: 300;
+    max-width: 480px;
+    margin: 0 auto;
+  }
+
+  .pill {
+    display: inline-block;
+    background: rgba(255,255,255,0.15);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 20px;
+    font-size: 0.8rem;
+    padding: 3px 12px;
+    margin-top: 0.75rem;
+    font-weight: 300;
+    letter-spacing: 0.04em;
+  }
+
+  main {
+    max-width: 760px;
+    margin: 0 auto;
+    padding: 2rem 1rem 4rem;
+  }
+
+  .card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    padding: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .card-title {
+    font-size: 0.7rem;
+    font-weight: 500;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    margin-bottom: 1rem;
+  }
+
+  .fields {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  @media (max-width: 480px) {
+    .fields { grid-template-columns: 1fr; }
+  }
+
+  .field label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+
+  select, input[type=text] {
+    width: 100%;
+    padding: 9px 12px;
+    font-size: 0.95rem;
+    font-family: 'Source Sans 3', sans-serif;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg);
+    color: var(--text);
+    appearance: none;
+    -webkit-appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%234a5c54' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 12px center;
+    padding-right: 32px;
+    transition: border-color 0.2s;
+  }
+
+  input[type=text] {
+    background-image: none;
+    padding-right: 12px;
+  }
+
+  select:focus, input[type=text]:focus {
+    outline: none;
+    border-color: var(--green-light);
+  }
+
+  .field-full {
+    margin-bottom: 1rem;
+  }
+
+  .field-full label {
+    display: block;
+    font-size: 0.85rem;
+    color: var(--text-mid);
+    margin-bottom: 5px;
+    font-weight: 500;
+  }
+
+  .toggle-group {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-bottom: 1.25rem;
+  }
+
+  .toggle-btn {
+    padding: 7px 16px;
+    font-size: 0.875rem;
+    font-family: 'Source Sans 3', sans-serif;
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    background: var(--bg);
+    color: var(--text-mid);
+    cursor: pointer;
+    transition: all 0.18s;
+    font-weight: 400;
+  }
+
+  .toggle-btn:hover { border-color: var(--green-light); color: var(--green); }
+
+  .toggle-btn.active {
+    background: var(--green);
+    border-color: var(--green);
+    color: white;
+    font-weight: 500;
+  }
+
+  .btn-generate {
+    background: var(--green);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    padding: 12px 28px;
+    font-size: 1rem;
+    font-family: 'Source Sans 3', sans-serif;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .btn-generate:hover { background: var(--green-light); }
+  .btn-generate:active { transform: scale(0.98); }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--text-light);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 18px;
+    font-size: 0.9rem;
+    font-family: 'Source Sans 3', sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+    margin-left: 8px;
+  }
+
+  .btn-secondary:hover { background: var(--bg); color: var(--text-mid); }
+
+  #output { margin-top: 1.5rem; }
+
+  .week-label {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    color: var(--green);
+    margin: 1.5rem 0 0.75rem;
+    padding-bottom: 0.4rem;
+    border-bottom: 2px solid var(--green-mid);
+  }
+
+  .day-card {
+    background: var(--white);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    margin-bottom: 0.875rem;
+    overflow: hidden;
+  }
+
+  .day-header {
+    background: var(--green);
+    color: white;
+    padding: 0.6rem 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.95rem;
+    font-weight: 500;
+  }
+
+  .day-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+  }
+
+  .badges { display: flex; gap: 5px; }
+
+  .badge {
+    font-size: 0.7rem;
+    padding: 2px 8px;
+    border-radius: 10px;
+    font-weight: 500;
+    font-family: 'Source Sans 3', sans-serif;
+  }
+
+  .badge-m { background: rgba(255,255,255,0.2); color: white; }
+  .badge-k { background: rgba(255,220,150,0.35); color: #ffe4a0; }
+
+  .meal-row {
+    display: grid;
+    grid-template-columns: 100px 1fr;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .meal-row:last-child { border-bottom: none; }
+
+  .meal-label {
+    padding: 0.65rem 0.75rem;
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--text-light);
+    background: #fafaf8;
+    border-right: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+  }
+
+  .meal-content {
+    padding: 0.65rem 0.875rem;
+    font-size: 0.9rem;
+  }
+
+  .meal-content a {
+    color: var(--green);
+    text-decoration: none;
+    font-weight: 500;
+  }
+
+  .meal-content a:hover { text-decoration: underline; }
+
+  .meal-meta {
+    font-size: 0.75rem;
+    color: var(--text-light);
+    margin-top: 3px;
+    line-height: 1.5;
+  }
+
+  .meal-row.dessert-row .meal-label {
+    background: var(--green-pale);
+    color: var(--green);
+    border-right-color: var(--green-mid);
+  }
+
+  .dessert-note {
+    display: inline-block;
+    font-size: 0.7rem;
+    background: var(--green-pale);
+    color: var(--green);
+    border: 1px solid var(--green-mid);
+    border-radius: 4px;
+    padding: 1px 7px;
+    margin-top: 3px;
+  }
+
+  .suppe-tag {
+    display: inline-block;
+    font-size: 0.68rem;
+    background: var(--blue-pale);
+    color: var(--blue);
+    border-radius: 4px;
+    padding: 1px 6px;
+    margin-left: 5px;
+    font-weight: 500;
+    vertical-align: middle;
+  }
+
+  .info-bar {
+    background: var(--green-pale);
+    border: 1px solid var(--green-mid);
+    border-radius: var(--radius);
+    padding: 0.875rem 1.1rem;
+    font-size: 0.875rem;
+    color: var(--text-mid);
+    line-height: 1.7;
+    margin-bottom: 1rem;
+  }
+
+  .info-bar strong { color: var(--green); }
+
+  .avoid-bar {
+    background: var(--amber-pale);
+    border: 1px solid #e8d0a0;
+    border-radius: var(--radius);
+    padding: 0.6rem 1rem;
+    font-size: 0.85rem;
+    color: var(--amber);
+    margin-bottom: 0.75rem;
+  }
+
+  .bottom-actions {
+    text-align: center;
+    margin-top: 1rem;
+    padding-bottom: 2rem;
+  }
+
+  footer {
+    text-align: center;
+    padding: 1.5rem;
+    font-size: 0.8rem;
+    color: var(--text-light);
+    border-top: 1px solid var(--border);
+    background: var(--white);
+  }
+
+  footer a { color: var(--green); text-decoration: none; }
+  footer a:hover { text-decoration: underline; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>DDV Menuplan-assistent</h1>
+  <p>Ugemenuer baseret på De Danske Vægtkonsulenter's kostprogram fra 2009/2010</p>
+  <span class="pill">Alle regler overholdes automatisk</span>
+</header>
+
+<main>
+  <div class="card">
+    <div class="card-title">Indstillinger</div>
+
+    <div class="fields">
+      <div class="field">
+        <label>Antal uger</label>
+        <select id="weeks">
+          <option value="1">1 uge</option>
+          <option value="2">2 uger</option>
+        </select>
+      </div>
+      <div class="field">
+        <label>Personer &amp; køn</label>
+        <select id="persons">
+          <option value="1k">1 person – kvinde</option>
+          <option value="1m">1 person – mand</option>
+          <option value="2k">2 kvinder</option>
+          <option value="2m">2 mænd</option>
+          <option value="2mk">Mand + kvinde</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="field-full">
+      <label>Ingredienser jeg vil undgå (kommasepareret)</label>
+      <input type="text" id="avoid" placeholder="fx: agurk, chili, rejer, nødder...">
+    </div>
+
+    <div class="field-full">
+      <label>Dessert</label>
+      <div class="toggle-group">
+        <button class="toggle-btn active" id="des-ingen" onclick="setDessert('ingen')">Ingen dessert</button>
+        <button class="toggle-btn" id="des-weekend" onclick="setDessert('weekend')">Kun weekender</button>
+        <button class="toggle-btn" id="des-alle" onclick="setDessert('alle')">Alle dage</button>
+      </div>
+    </div>
+
+    <div>
+      <button class="btn-generate" onclick="generateMenu()">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.5 8A5.5 5.5 0 112.5 8a5.5 5.5 0 0111 0z" stroke="white" stroke-width="1.3"/><path d="M8 5v3l2 2" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
+        Generer menuplan
+      </button>
+      <button class="btn-secondary" onclick="document.getElementById('output').innerHTML=''">Ryd</button>
+    </div>
+  </div>
+
+  <div id="output"></div>
+</main>
+
+<footer>
+  Opskrifter fra <a href="https://carinas.dk/ddv/" target="_blank">carinas.dk/ddv</a> –
+  DDV's kostprogram 2009/2010 · Siden er gratis og uden reklamer
+</footer>
+
+<script>
+let dessertMode = 'ingen';
+
+function setDessert(mode) {
+  dessertMode = mode;
+  ['ingen','weekend','alle'].forEach(m => {
+    document.getElementById('des-'+m).classList.toggle('active', m === mode);
+  });
+}
+
+const MORGENMAD = [
+  { name:"Havregrød med æbler eller svesker", url:"https://carinas.dk/ddv/havregrod-med-aebler-eller-svesker/", tags:["havre","æble","svesker"] },
+  { name:"Birchen müsli med blåbær", url:"https://carinas.dk/ddv/birchen-musli-med-blabaer/", tags:["müsli","blåbær","yoghurt"] },
+  { name:"Bagt kokoscreme med bær", url:"https://carinas.dk/ddv/bagt-kokoscreme-med-baer/", tags:["kokosmælk","bær"] },
+  { name:"Hytteost med æble & mynte", url:"https://carinas.dk/ddv/hytteost-med-aeble-mynte/", tags:["hytteost","æble","mynte"] },
+  { name:"Müsli", url:"https://carinas.dk/ddv/musli/", tags:["müsli","gryn","nødder"] },
+  { name:"Rugbrød med ost", url:"https://carinas.dk/ddv/rugbrod-med-ost/", tags:["rugbrød","ost"] },
+  { name:"Peanutbuttersandwich", url:"https://carinas.dk/ddv/peanutbutter-sandwich/", tags:["peanutbutter","brød"] },
+  { name:"Supergrød med quinoa, gryn & nødder", url:"https://carinas.dk/ddv/supergrod-med-quinoa-gryn-nodder/", tags:["quinoa","gryn","nødder"] },
+  { name:"Trifli med appelsin & æble", url:"https://carinas.dk/ddv/trifli-med-appelsin-aeble/", tags:["yoghurt","appelsin","æble"] },
+  { name:"Æblegrød med lynmysli", url:"https://carinas.dk/ddv/aeblegroed-med-lynmysli/", tags:["æble","müsli"] },
+  { name:"Blødkogt æg", url:"https://carinas.dk/ddv/blodkogt-aeg/", tags:["æg"] },
+  { name:"Omelet med avocado", url:"https://carinas.dk/ddv/omelet-med-avokado/", tags:["æg","avocado"] },
+  { name:"Pandekager", url:"https://carinas.dk/ddv/pandekager/", tags:["æg","mel"] },
+  { name:"Hjemmelavede guldkorn", url:"https://carinas.dk/ddv/hjemmelavede-guldkorn/", tags:["gryn","honning"] },
+  { name:"Sesam rundstykker", url:"https://carinas.dk/ddv/sesamrundstykker/", tags:["sesam","brød"] },
+  { name:"Ananasyoghurt med knas", url:"https://carinas.dk/ddv/ananasyoghurt-med-morgenknas/", tags:["ananas","yoghurt"] },
+];
+
+const SUPPER = [
+  { name:"Broccolisuppe", url:"https://carinas.dk/ddv/broccolisuppe/", tags:["broccoli"] },
+  { name:"Cremet hokaidosuppe", url:"https://carinas.dk/ddv/cremet-hokaidosuppe/", tags:["hokaido","græskar"] },
+  { name:"Fiskesuppe med jordskok", url:"https://carinas.dk/ddv/fiskesuppe-med-jordskok/", tags:["fisk","jordskok"] },
+  { name:"Fyldig suppe med laks og rejer", url:"https://carinas.dk/ddv/fyldig-suppe-med-laks-og-rejer/", tags:["laks","rejer"] },
+  { name:"Gazpachosuppe med æg og grønt", url:"https://carinas.dk/ddv/gazpachosuppe-med-aeg-og-groent/", tags:["tomat","æg","agurk"] },
+  { name:"Gulerods/appelsinsuppe", url:"https://carinas.dk/ddv/gulerodsappelsinsuppe/", tags:["gulerod","appelsin"] },
+  { name:"Gulerodssuppe med frisk ost", url:"https://carinas.dk/ddv/gulerodssuppe-med-frisk-ost/", tags:["gulerod","ost"] },
+  { name:"Kalorielet tomatsuppe", url:"https://carinas.dk/ddv/kalorielet-tomatsuppe/", tags:["tomat"] },
+  { name:"Karrysuppe med mango & rejer", url:"https://carinas.dk/ddv/karrysuppe-med-mango-rejer/", tags:["karry","mango","rejer"] },
+  { name:"Klar suppe med grønsager og kødboller", url:"https://carinas.dk/ddv/klar-suppe-med-groensager-og-koedboller/", tags:["hakket kød","grøntsager"] },
+  { name:"Løgsuppe", url:"https://carinas.dk/ddv/logsuppe/", tags:["løg","ost"] },
+  { name:"Nem bagt tomatsuppe", url:"https://carinas.dk/ddv/nem-bagt-tomatsuppe/", tags:["tomat"] },
+  { name:"Sellerisuppe med kokosmælk", url:"https://carinas.dk/ddv/sellerisuppe-med-kokosmaelk/", tags:["selleri","kokosmælk"] },
+  { name:"Skaldyrssuppe", url:"https://carinas.dk/ddv/skaldyrssuppe/", tags:["rejer","muslinger","skaldyr"] },
+  { name:"Stærk gullashsuppe", url:"https://carinas.dk/ddv/staerk-gullaschsuppe/", tags:["oksekød","paprika","chili"] },
+  { name:"Thaisuppe med sugarsnaps", url:"https://carinas.dk/ddv/thaisuppe-med-sugarsnaps/", tags:["chili","ingefær","sugarsnaps"] },
+  { name:"Tomatsuppe", url:"https://carinas.dk/ddv/tomatsuppe/", tags:["tomat"] },
+  { name:"Forbrændingssuppe", url:"https://carinas.dk/ddv/forbraendingssuppe/", tags:["grøntsager","kål"] },
+  { name:"Fennikelsuppe med østers", url:"https://carinas.dk/ddv/fennikelsuppe-med-osters/", tags:["fennikel","østers"] },
+  { name:"Hvidløgssuppe med revet ost", url:"https://carinas.dk/ddv/hvidlogssuppe-med-revet-ost/", tags:["hvidløg","ost"] },
+];
+
+const FROKOST = [
+  { name:"Hønsesalat", url:"https://carinas.dk/ddv/honsesalat/", tags:["kylling","salat","mayonnaise"] },
+  { name:"Kyllingesalat", url:"https://carinas.dk/ddv/kyllingesalat/", tags:["kylling","salat"] },
+  { name:"Sandwich med kylling", url:"https://carinas.dk/ddv/sandwich-med-kylling/", tags:["kylling","brød"] },
+  { name:"Roastbeef med waldorfsalat", url:"https://carinas.dk/ddv/roastbeef-med-waldorfsalat/", tags:["roastbeef","nødder","selleri","æble"] },
+  { name:"Omelet med svampe", url:"https://carinas.dk/ddv/omelet-med-svampe/", tags:["æg","svampe"] },
+  { name:"Grøn æggesalat", url:"https://carinas.dk/ddv/gron-aeggesalat/", tags:["æg","grøntsager"] },
+  { name:"Rejesalat", url:"https://carinas.dk/ddv/rejesalat/", tags:["rejer","salat"] },
+  { name:"Klassisk rejesalat", url:"https://carinas.dk/ddv/klassisk-rejesalat/", tags:["rejer","mayonnaise"] },
+  { name:"Røget laks med spinat og røræg", url:"https://carinas.dk/ddv/roget-laks-med-stuvet-spinat-og-roreag/", tags:["laks","spinat","æg"] },
+  { name:"Røget makrel med radisesalat", url:"https://carinas.dk/ddv/roget-makrel-med-radisesalat/", tags:["makrel","radise"] },
+  { name:"Salade nicoise", url:"https://carinas.dk/ddv/salade-nicoise/", tags:["tun","æg","oliven"] },
+  { name:"Tun i lun nicoisesalat", url:"https://carinas.dk/ddv/tun-i-lun-nicoisesalat/", tags:["tun","salat"] },
+  { name:"Provence tunsalat", url:"https://carinas.dk/ddv/provence-tunsalat/", tags:["tun","salat"] },
+  { name:"Laksecreme med salat & granatæble", url:"https://carinas.dk/ddv/laksecreme/", tags:["laks","granatæble"] },
+  { name:"DDV frikadeller", url:"https://carinas.dk/ddv/ddv-frikadeller/", tags:["hakket kød","frikadeller"] },
+  { name:"Scrambled eggs og sprød skinke", url:"https://carinas.dk/ddv/scrambled-eggs-sproed-skinke/", tags:["æg","skinke"] },
+  { name:"Tortillawraps med kylling", url:"https://carinas.dk/ddv/tortillawraps-med-kylling/", tags:["kylling","tortilla"] },
+  { name:"Frokost pizza", url:"https://carinas.dk/ddv/frokost-pizza/", tags:["pizza","tomatsauce"] },
+  { name:"Spinatsalat med oksespegepølse", url:"https://carinas.dk/ddv/spinatsalat-med-oksespegepolse/", tags:["spinat","pølse"] },
+  { name:"Salat med kylling og linser", url:"https://carinas.dk/ddv/salat-med-kylling-og-linser/", tags:["kylling","linser","salat"] },
+  { name:"Melon med spegeskinke", url:"https://carinas.dk/ddv/melon-med-spegeskinke/", tags:["melon","skinke"] },
+  { name:"Lever med løg og æble", url:"https://carinas.dk/ddv/lever-med-log-og-aeble/", tags:["lever","løg","æble"] },
+  { name:"Sandwich med skinke og avocado", url:"https://carinas.dk/ddv/sandwich-med-skinke-og-avocado/", tags:["skinke","avocado","brød"] },
+  { name:"Bulgursalat med rejer, hvidløg og basilikum", url:"https://carinas.dk/ddv/bulgursalat-med-rejer-hvidlog-og-basilikum/", tags:["rejer","bulgur","hvidløg"] },
+  { name:"Pastasalat med rejer", url:"https://carinas.dk/ddv/pastasalat-med-rejer/", tags:["rejer","pasta"] },
+  { name:"Burger", url:"https://carinas.dk/ddv/burger/", tags:["oksekød","brød"] },
+  { name:"Madmuffins med skinke", url:"https://carinas.dk/ddv/madmuffins-med-skinke/", tags:["skinke","æg"] },
+  { name:"Karrykylling med rodfrugtsalat", url:"https://carinas.dk/ddv/karrykylling-med-rodfrugtsalat/", tags:["kylling","karry","rodfrugter"] },
+  { name:"Avokado-jordbærsalat med kylling", url:"https://carinas.dk/ddv/avokado-jordbaersalat-med-kylling/", tags:["avocado","jordbær","kylling"] },
+  { name:"Rygeost salat", url:"https://carinas.dk/ddv/rygeost-salat/", tags:["rygeost","salat"] },
+  { name:"Hønsesalat med asparges & champignon", url:"https://carinas.dk/ddv/honsesalat-med-aspages-og-champignon/", tags:["kylling","asparges","svampe"] },
+];
+
+const MIDDAG = [
+  { name:"DDV frikadeller", url:"https://carinas.dk/ddv/ddv-frikadeller/", tags:["hakket kød"] },
+  { name:"Grillet kylling med kartoffelsalat", url:"https://carinas.dk/ddv/grillet-kylling-med-kartoffelsalat/", tags:["kylling","kartoffel"] },
+  { name:"Kylling i tomat-sellerisauce", url:"https://carinas.dk/ddv/kylling-i-tomat-sellerisovs/", tags:["kylling","tomat","selleri"] },
+  { name:"Helstegt citronkylling", url:"https://carinas.dk/ddv/helstegt-citronkylling/", tags:["kylling","citron"] },
+  { name:"Stegt laks med spinat og kartoffelbåde", url:"https://carinas.dk/ddv/stegt-laks-med-spinat-og-kartoffelbaade/", tags:["laks","spinat","kartoffel"] },
+  { name:"Grillet dildlaks med blomkål & tahindressing", url:"https://carinas.dk/ddv/grillet-dildlaks-med-blomkal-tahindressing/", tags:["laks","dild","blomkål"] },
+  { name:"Spaghetti med kødsauce", url:"https://carinas.dk/ddv/spaghetti-med-kodsauce/", tags:["oksekød","pasta","tomat"] },
+  { name:"Peberbøf med svampesauce", url:"https://carinas.dk/ddv/peberboef-med-svampesauce/", tags:["oksekød","svampe","peber"] },
+  { name:"Mørbrad med kantareller", url:"https://carinas.dk/ddv/moerbrad-med-kantareller/", tags:["svinekød","svampe"] },
+  { name:"Boller i karry", url:"https://carinas.dk/ddv/boller-i-karry/", tags:["hakket kød","karry","ris"] },
+  { name:"Frikadeller med stuvet hvidkål", url:"https://carinas.dk/ddv/frikadeller-med-stuvet-hvidkal/", tags:["hakket kød","hvidkål"] },
+  { name:"Chili con carne med ærte guacamole", url:"https://carinas.dk/ddv/chili-con-carne-med-aerte-guacamole/", tags:["chili","oksekød","bønner","avocado"] },
+  { name:"Kalvefrikasse med grønsager", url:"https://carinas.dk/ddv/kalvefrikasse-med-groensager/", tags:["kalv","grøntsager"] },
+  { name:"Tandoori kylling", url:"https://carinas.dk/ddv/tandoori-kylling/", tags:["kylling","yoghurt","krydderier"] },
+  { name:"Fiskelasagne", url:"https://carinas.dk/ddv/fiskelasagne/", tags:["fisk","pasta","bechamel"] },
+  { name:"Kogt torsk med sennepssauce & garniture", url:"https://carinas.dk/ddv/kogt-torsk-med-sennepssauce-garniture/", tags:["torsk","sennep"] },
+  { name:"Sprødstegt laks med grønsager", url:"https://carinas.dk/ddv/sproedstegt-laks-med-groensager/", tags:["laks","grøntsager"] },
+  { name:"Grydesteg med rodfrugter", url:"https://carinas.dk/ddv/grydesteg-med-rodfrugter/", tags:["oksekød","rodfrugter"] },
+  { name:"Gullash", url:"https://carinas.dk/ddv/gullash/", tags:["oksekød","paprika","tomat"] },
+  { name:"Krydret lammegryde", url:"https://carinas.dk/ddv/krydret-lammegryde/", tags:["lam","krydderier"] },
+  { name:"Kylling á la orange", url:"https://carinas.dk/ddv/kylling-med-appelsinsauce/", tags:["kylling","appelsin"] },
+  { name:"Flæskesteg med peberrods-æblemos", url:"https://carinas.dk/ddv/flaeskesteg-med-peberrods-aeblemos/", tags:["svinekød","peberrod","æble"] },
+  { name:"Wokgryde med skinketern i østerssauce", url:"https://carinas.dk/ddv/wokgryde-med-skinketern-i-osterssauce/", tags:["skinke","wok"] },
+  { name:"Kylling i chili", url:"https://carinas.dk/ddv/kylling-i-chili/", tags:["kylling","chili"] },
+  { name:"Chicken garam masala", url:"https://carinas.dk/ddv/chicken-garam-masala/", tags:["kylling","karry","krydderier"] },
+  { name:"Stegt makrel med hvidløgsspinat", url:"https://carinas.dk/ddv/stegt-makrel-med-hvidlogsspinat/", tags:["makrel","hvidløg","spinat"] },
+  { name:"Surf & turf", url:"https://carinas.dk/ddv/surf-turf/", tags:["oksekød","rejer"] },
+  { name:"Kalkungryde med kartoffel-urte-mos", url:"https://carinas.dk/ddv/kalkungryde-med-kartoffel-urte-mos/", tags:["kalkun","kartoffel"] },
+  { name:"Lasagne med bechamelsauce", url:"https://carinas.dk/ddv/lasagne-med-bechamelsauce/", tags:["oksekød","pasta","bechamel"] },
+  { name:"Paella", url:"https://carinas.dk/ddv/paella/", tags:["rejer","ris","paprika"] },
+  { name:"Kyllingelår med grov rodfrugtmos", url:"https://carinas.dk/ddv/kyllingelaar-med-grov-rodfrugtmos/", tags:["kylling","rodfrugter"] },
+  { name:"Helstegt svinekam med rødkål & svampesauce", url:"https://carinas.dk/ddv/helstegt-svinekam-med-rodkal-svampesauce/", tags:["svinekød","rødkål","svampe"] },
+  { name:"Forloren hare med bagte jordskokker", url:"https://carinas.dk/ddv/forloren-hare/", tags:["hakket kød","jordskok"] },
+  { name:"Stegt lam med aubergine og granatæble", url:"https://carinas.dk/ddv/stegt-lam-med-aubergine-granataeble/", tags:["lam","aubergine"] },
+  { name:"Svinekotelet med grillede rabarber", url:"https://carinas.dk/ddv/svinekotelet-med-grillede-rabarber/", tags:["svinekød","rabarber"] },
+];
+
+const DESSERT = [
+  { name:"Frugtsalat", url:"https://carinas.dk/ddv/frugtsalat/", tags:["frugt"], frugt:2, note:"Tæller 2 frugter" },
+  { name:"Jordbærdessert med skyr og myntesukker", url:"https://carinas.dk/ddv/jordbaerdessert-med-skyr-og-myntesukker/", tags:["jordbær","skyr"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Jordbærgrød", url:"https://carinas.dk/ddv/jordbaergroed/", tags:["jordbær"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Bagt æble og svesker med kokos og mandler", url:"https://carinas.dk/ddv/bagt-aeble-og-svesker-med-kokos-og-mandler/", tags:["æble","svesker","kokos","mandler"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Kanelæbler", url:"https://carinas.dk/ddv/kanelabler/", tags:["æble","kanel"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Citronmousse med appelsin/brombær", url:"https://carinas.dk/ddv/citronmousse-med-appelsinbrombaer/", tags:["citron","appelsin","brombær"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Appelsinfromage", url:"https://carinas.dk/ddv/appelsinfromage/", tags:["appelsin"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Melonsalat med passionsfrugtsovs", url:"https://carinas.dk/ddv/melonsalat-med-passionsfrugtsovs/", tags:["melon","passionsfrugt"], frugt:2, note:"Tæller 2 frugter" },
+  { name:"Bagte blommer", url:"https://carinas.dk/ddv/bagte-blommer/", tags:["blommer"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Bærfromage", url:"https://carinas.dk/ddv/baerfromage/", tags:["bær"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Bærdessert med creme og nøddeblanding", url:"https://carinas.dk/ddv/baerdessert-med-creme-og-noddeblanding/", tags:["bær","nødder"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Ananas bagt i frugtsaft", url:"https://carinas.dk/ddv/ananas-bagt-i-frugtsaft/", tags:["ananas"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Grillet frugtspyd", url:"https://carinas.dk/ddv/grillet-frugtspyd/", tags:["frugt","ananas","jordbær"], frugt:2, note:"Tæller 2 frugter" },
+  { name:"Jordbærsorbet med hyldeblomst", url:"https://carinas.dk/ddv/jordbaersorbet-med-hyldeblomst/", tags:["jordbær"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Chokolademousse med pæresorbet", url:"https://carinas.dk/ddv/chokolademousse-med-paeresorbet/", tags:["pære","chokolade"], frugt:1, note:"Tæller 1 frugt (ekstra)" },
+  { name:"Ferskenfromage med hindbær", url:"https://carinas.dk/ddv/ferskenfromage-med-hindbaer/", tags:["fersken","hindbær"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Choko-hindbærmousse", url:"https://carinas.dk/ddv/choko-hindbaermousse/", tags:["hindbær","chokolade"], frugt:1, note:"Tæller 1 frugt (ekstra)" },
+  { name:"Krydret æble/pærekompot", url:"https://carinas.dk/ddv/krydret-aeble-paerekompot/", tags:["æble","pære"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Rabarbermousse", url:"https://carinas.dk/ddv/rabarbermousse/", tags:["rabarber"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Mangosorbet", url:"https://carinas.dk/ddv/mangosorbet/", tags:["mango"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Frugter i yoghurt", url:"https://carinas.dk/ddv/frugter-i-ddv-yoghurt/", tags:["frugt","yoghurt"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Trifli med rabarber og jordbær", url:"https://carinas.dk/ddv/trifli-med-rabarber-og-jordbaer/", tags:["rabarber","jordbær","yoghurt"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Jordbær softice", url:"https://carinas.dk/ddv/jordbaersoftice/", tags:["jordbær"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Pære med After Eight creme", url:"https://carinas.dk/ddv/paere-med-after-eight-creme/", tags:["pære","chokolade"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Æble med mandelfyld", url:"https://carinas.dk/ddv/aeble-med-mandelfyld/", tags:["æble","mandler","nødder"], frugt:1, note:"Tæller 1 frugt" },
+];
+
+const DAYS = ["Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"];
+const SUPPE_NAMES = new Set(SUPPER.map(s => s.name));
+
+function shuffle(arr) {
+  const a = [...arr];
+  for (let i = a.length-1; i > 0; i--) {
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function filterOut(list, avoid) {
+  if (!avoid.length) return list;
+  return list.filter(item =>
+    !avoid.some(w => item.tags.some(t => t.toLowerCase().includes(w)) || item.name.toLowerCase().includes(w))
+  );
+}
+
+function pickUnique(list, used, count) {
+  let avail = list.filter(x => !used.has(x.name));
+  if (avail.length < count) avail = [...list];
+  const pool = shuffle(avail);
+  const result = [];
+  for (let i = 0; i < count && i < pool.length; i++) {
+    result.push(pool[i]);
+    used.add(pool[i].name);
+  }
+  return result;
+}
+
+function isWeekend(d) { return d === 5 || d === 6; }
+function wantsDessert(d) {
+  if (dessertMode === 'ingen') return false;
+  if (dessertMode === 'weekend') return isWeekend(d);
+  return true;
+}
+
+function generateMenu() {
+  const weeks = parseInt(document.getElementById('weeks').value);
+  const persons = document.getElementById('persons').value;
+  const avoidRaw = document.getElementById('avoid').value.toLowerCase().trim();
+  const avoid = avoidRaw ? avoidRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+
+  const isMale = persons.includes('m');
+  const numPersons = persons.startsWith('2') ? 2 : 1;
+  const mixed = persons === '2mk';
+  const totalDays = weeks * 7;
+
+  const fM  = filterOut(MORGENMAD, avoid);
+  const fF  = filterOut(FROKOST, avoid);
+  const fS  = filterOut(SUPPER, avoid);
+  const fD  = filterOut(MIDDAG, avoid);
+  const fDes = filterOut(DESSERT, avoid);
+
+  const frokostPool = shuffle([...fF, ...fS.slice(0, Math.ceil(fS.length/2))]);
+  const middagPool  = shuffle([...fD, ...fS.slice(Math.ceil(fS.length/2))]);
+
+  const usedM = new Set(), usedF = new Set(), usedD = new Set(), usedDes = new Set();
+  const morgenList  = pickUnique(fM, usedM, totalDays);
+  const frokostList = pickUnique(frokostPool, usedF, totalDays);
+  const middagList  = pickUnique(middagPool, usedD, totalDays);
+  const dessertList = pickUnique(fDes, usedDes, totalDays);
+
+  let html = '';
+
+  if (avoid.length) {
+    html += `<div class="avoid-bar">Undgår: <strong>${avoid.join(', ')}</strong></div>`;
+  }
+
+  for (let w = 0; w < weeks; w++) {
+    if (weeks > 1) html += `<div class="week-label">Uge ${w+1}</div>`;
+
+    for (let d = 0; d < 7; d++) {
+      const idx = w*7 + d;
+      const m   = morgenList[idx % morgenList.length];
+      const f   = frokostList[idx % frokostList.length];
+      const di  = middagList[idx % middagList.length];
+      const des = wantsDessert(d) ? dessertList[idx % dessertList.length] : null;
+
+      const isSupF = SUPPE_NAMES.has(f.name);
+      const isSupD = SUPPE_NAMES.has(di.name);
+
+      let badges = '';
+      if (mixed) badges = `<span class="badge badge-m">Mand</span><span class="badge badge-k">Kvinde</span>`;
+      else if (isMale && numPersons===2) badges = `<span class="badge badge-m">2 mænd</span>`;
+      else if (!isMale && numPersons===2) badges = `<span class="badge badge-k">2 kvinder</span>`;
+      else if (isMale) badges = `<span class="badge badge-m">Mand</span>`;
+      else badges = `<span class="badge badge-k">Kvinde</span>`;
+
+      let froMeta, midMeta;
+      const pp = numPersons===2 ? ' (per person)' : '';
+      if (mixed) {
+        froMeta = `Mand: 80-120g protein · 200-300g grønt · 60g brød<br>Kvinde: 80-120g protein · 200-300g grønt · 30g brød`;
+        midMeta = `Mand: 170-220g protein · 200-300g grønt<br>Kvinde: 120-170g protein · 200-300g grønt`;
+      } else if (isMale) {
+        froMeta = `80-120g protein · 200-300g grønt · 60g brød${pp}`;
+        midMeta = `170-220g protein · 200-300g grønt${pp}`;
+      } else {
+        froMeta = `80-120g protein · 200-300g grønt · 30g brød${pp}`;
+        midMeta = `120-170g protein · 200-300g grønt${pp}`;
+      }
+
+      html += `<div class="day-card">
+        <div class="day-header">
+          <span class="day-name">${DAYS[d]}</span>
+          <div class="badges">${badges}</div>
+        </div>
+        <div class="meal-row">
+          <div class="meal-label">Morgenmad</div>
+          <div class="meal-content">
+            <a href="${m.url}" target="_blank">${m.name}</a>
+            <div class="meal-meta">1 æg / ost / 30g morgenmadsprod. · 1 frugt · 30g brød</div>
+          </div>
+        </div>
+        <div class="meal-row">
+          <div class="meal-label">Frokost</div>
+          <div class="meal-content">
+            <a href="${f.url}" target="_blank">${f.name}</a>${isSupF ? '<span class="suppe-tag">suppe</span>' : ''}
+            <div class="meal-meta">${froMeta}</div>
+          </div>
+        </div>
+        <div class="meal-row">
+          <div class="meal-label">Middag</div>
+          <div class="meal-content">
+            <a href="${di.url}" target="_blank">${di.name}</a>${isSupD ? '<span class="suppe-tag">suppe</span>' : ''}
+            <div class="meal-meta">${midMeta}</div>
+          </div>
+        </div>
+        ${des ? `<div class="meal-row dessert-row">
+          <div class="meal-label">Dessert</div>
+          <div class="meal-content">
+            <a href="${des.url}" target="_blank">${des.name}</a>
+            <div class="dessert-note">${des.note} · trækkes fra din daglige frugtkvote</div>
+          </div>
+        </div>` : ''}
+      </div>`;
+    }
+  }
+
+  const frugtK = "3–4 frugter/dag (mindst 1 fra gruppe 1)";
+  const frugtM = "4–5 frugter/dag (mindst 1 fra gruppe 1)";
+  const frugtTekst = mixed ? `Kvinde: ${frugtK} · Mand: ${frugtM}` : isMale ? frugtM : frugtK;
+
+  html += `<div class="info-bar">
+    <strong>Husk dagligt:</strong> ½ liter mælkeprodukt (fordelt over dagen) · ${frugtTekst} · 15g fedtstof (råt) · 2 liter vand · Ingen alkohol eller sukker<br>
+    ${dessertMode !== 'ingen' ? '<strong>Dessert:</strong> Tæller som en del af din daglige frugtkvote – planlæg resten af dagen derefter.' : ''}
+  </div>
+  <div style="text-align:center; padding: 0.5rem 0 1rem;">
+    <button class="btn-generate" onclick="generateMenu()">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M13.5 8A5.5 5.5 0 112.5 8a5.5 5.5 0 0111 0z" stroke="white" stroke-width="1.3"/><path d="M8 5v3l2 2" stroke="white" stroke-width="1.3" stroke-linecap="round"/></svg>
+      Ny tilfældig plan
+    </button>
+  </div>`;
+
+  document.getElementById('output').innerHTML = html;
+  document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+</script>
+</body>
+</html>
