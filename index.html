@@ -499,6 +499,11 @@ main {
     </div>
 
     <div class="field-full">
+      <label>Kategorier jeg vil undgå (kommasepareret)</label>
+      <input type="text" id="avoidCategories" placeholder="fx: fisk, skaldyr, svinekød, supper...">
+    </div>
+
+    <div class="field-full">
       <label>Dessert</label>
       <div class="toggle-group">
         <button class="toggle-btn active" id="des-ingen" onclick="setDessert('ingen')">Ingen dessert</button>
@@ -535,145 +540,145 @@ function setDessert(mode) {
 }
 
 const MORGENMAD = [
-  { name:"Havregrød med æbler eller svesker", url:"https://carinas.dk/ddv/havregrød-med-æbler-eller-svesker/", tags:["havre","æble","svesker"] },
-  { name:"Birchen müsli med blåbær", url:"https://carinas.dk/ddv/birchen-musli-med-blåbær/", tags:["müsli","blåbær","yoghurt"] },
-  { name:"Bagt kokoscreme med bær", url:"https://carinas.dk/ddv/bagt-kokoscreme-med-bær/", tags:["kokosmælk","bær"] },
-  { name:"Hytteost med æble & mynte", url:"https://carinas.dk/ddv/hytteost-med-aeble-mynte/", tags:["hytteost","æble","mynte"] },
-  { name:"Müsli", url:"https://carinas.dk/ddv/musli/", tags:["müsli","gryn","nødder"] },
-  { name:"Rugbrød med ost", url:"https://carinas.dk/ddv/rugbrød-med-ost/", tags:["rugbrød","ost"] },
-  { name:"Peanutbuttersandwich", url:"https://carinas.dk/ddv/peanutbutter-sandwich/", tags:["peanutbutter","brød"] },
-  { name:"Supergrød med quinoa, gryn & nødder", url:"https://carinas.dk/ddv/supergrød-med-quinoa-gryn-nødder/", tags:["quinoa","gryn","nødder"] },
-  { name:"Trifli med appelsin & æble", url:"https://carinas.dk/ddv/trifli-med-appelsin-aeble/", tags:["yoghurt","appelsin","æble"] },
-  { name:"Æblegrød med lynmysli", url:"https://carinas.dk/ddv/aeblegroed-med-lynmysli/", tags:["æble","müsli"] },
-  { name:"Blødkogt æg", url:"https://carinas.dk/ddv/blødkogt-æg/", tags:["æg"] },
-  { name:"Omelet med avocado", url:"https://carinas.dk/ddv/omelet-med-avocado/", tags:["æg","avocado"] },
-  { name:"Pandekager", url:"https://carinas.dk/ddv/pandekager/", tags:["æg","mel"] },
-  { name:"Hjemmelavede guldkorn", url:"https://carinas.dk/ddv/hjemmelavede-guldkorn/", tags:["gryn","honning"] },
-  { name:"Sesam rundstykker", url:"https://carinas.dk/ddv/sesamrundstykker/", tags:["sesam","brød"] },
-  { name:"Ananasyoghurt med knas", url:"https://carinas.dk/ddv/ananasyoghurt-med-knas/", tags:["ananas","yoghurt"] },
+  { name:"Havregrød med æbler eller svesker", url:"https://carinas.dk/ddv/havregrød-med-æbler-eller-svesker/", tags:["havre","æble","svesker"], categories:["vegetar","frugt"] },
+  { name:"Birchen müsli med blåbær", url:"https://carinas.dk/ddv/birchen-musli-med-blabaer/", tags:["müsli","blåbær","yoghurt"], categories:["vegetar","mejeri","frugt"] },
+  { name:"Bagt kokoscreme med bær", url:"https://carinas.dk/ddv/bagt-kokoscreme-med-baer/", tags:["kokosmælk","bær"], categories:["vegetar","frugt"] },
+  { name:"Hytteost med æble & mynte", url:"https://carinas.dk/ddv/hytteost-med-aeble-mynte/", tags:["hytteost","æble","mynte"], categories:["vegetar","mejeri","frugt"] },
+  { name:"Müsli", url:"https://carinas.dk/ddv/musli/", tags:["müsli","gryn","nødder"], categories:["vegetar"] },
+  { name:"Rugbrød med ost", url:"https://carinas.dk/ddv/rugbrød-med-ost/", tags:["rugbrød","ost"], categories:["vegetar","brød","mejeri"] },
+  { name:"Peanutbuttersandwich", url:"https://carinas.dk/ddv/peanutbutter-sandwich/", tags:["peanutbutter","brød"], categories:["vegetar","brød"] },
+  { name:"Supergrød med quinoa, gryn & nødder", url:"https://carinas.dk/ddv/supergrød-med-quinoa-gryn-nødder/", tags:["quinoa","gryn","nødder"], categories:["vegetar"] },
+  { name:"Trifli med appelsin & æble", url:"https://carinas.dk/ddv/trifli-med-appelsin-aeble/", tags:["yoghurt","appelsin","æble"], categories:["vegetar","mejeri","frugt"] },
+  { name:"Æblegrød med lynmysli", url:"https://carinas.dk/ddv/aeblegroed-med-lynmysli/", tags:["æble","müsli"], categories:["vegetar","frugt"] },
+  { name:"Blødkogt æg", url:"https://carinas.dk/ddv/blødkogt-æg/", tags:["æg"], categories:["æg"] },
+  { name:"Omelet med avocado", url:"https://carinas.dk/ddv/omelet-med-avocado/", tags:["æg","avocado"], categories:["æg","vegetar"] },
+  { name:"Pandekager", url:"https://carinas.dk/ddv/pandekager/", tags:["æg","mel"], categories:["æg","vegetar"] },
+  { name:"Hjemmelavede guldkorn", url:"https://carinas.dk/ddv/hjemmelavede-guldkorn/", tags:["gryn","honning"], categories:["vegetar"] },
+  { name:"Sesam rundstykker", url:"https://carinas.dk/ddv/sesamrundstykker/", tags:["sesam","brød"], categories:["vegetar","brød"] },
+  { name:"Ananasyoghurt med knas", url:"https://carinas.dk/ddv/ananasyoghurt-med-knas/", tags:["ananas","yoghurt"], categories:["vegetar","mejeri","frugt"] },
 ];
 
 const SUPPER = [
-  { name:"Broccolisuppe", url:"https://carinas.dk/ddv/broccolisuppe/", tags:["broccoli"] },
-  { name:"Cremet hokaidosuppe", url:"https://carinas.dk/ddv/cremet-hokaidosuppe/", tags:["hokaido","græskar"] },
-  { name:"Fiskesuppe med jordskok", url:"https://carinas.dk/ddv/fiskesuppe-med-jordskok/", tags:["fisk","jordskok"] },
-  { name:"Fyldig suppe med laks og rejer", url:"https://carinas.dk/ddv/fyldig-suppe-med-laks-og-rejer/", tags:["laks","rejer"] },
-  { name:"Gazpachosuppe med æg og grønt", url:"https://carinas.dk/ddv/gazpachosuppe-med-aeg-og-groent/", tags:["tomat","æg","agurk"] },
-  { name:"Gulerods/appelsinsuppe", url:"https://carinas.dk/ddv/gulerodsappelsinsuppe/", tags:["gulerod","appelsin"] },
-  { name:"Gulerodssuppe med frisk ost", url:"https://carinas.dk/ddv/gulerodssuppe-med-frisk-ost/", tags:["gulerod","ost"] },
-  { name:"Kalorielet tomatsuppe", url:"https://carinas.dk/ddv/kalorielet-tomatsuppe/", tags:["tomat"] },
-  { name:"Karrysuppe med mango & rejer", url:"https://carinas.dk/ddv/karrysuppe-med-mango-rejer/", tags:["karry","mango","rejer"] },
-  { name:"Klar suppe med grønsager og kødboller", url:"https://carinas.dk/ddv/klar-suppe-med-groensager-og-koedboller/", tags:["hakket kød","grøntsager"] },
-  { name:"Løgsuppe", url:"https://carinas.dk/ddv/løgsuppe/", tags:["løg","ost"] },
-  { name:"Nem bagt tomatsuppe", url:"https://carinas.dk/ddv/nem-bagt-tomatsuppe/", tags:["tomat"] },
-  { name:"Sellerisuppe med kokosmælk", url:"https://carinas.dk/ddv/sellerisuppe-med-kokosmælk/", tags:["selleri","kokosmælk"] },
-  { name:"Skaldyrssuppe", url:"https://carinas.dk/ddv/skaldyrssuppe/", tags:["rejer","muslinger","skaldyr"] },
-  { name:"Stærk gullashsuppe", url:"https://carinas.dk/ddv/steark-gullaschsuppe/", tags:["oksekød","paprika","chili"] },
-  { name:"Thaisuppe med sugarsnaps", url:"https://carinas.dk/ddv/thaisuppe-med-sugarsnaps/", tags:["chili","ingefær","sugarsnaps"] },
-  { name:"Tomatsuppe", url:"https://carinas.dk/ddv/tomatsuppe/", tags:["tomat"] },
-  { name:"Forbrændingssuppe", url:"https://carinas.dk/ddv/forbrændingssuppe/", tags:["grøntsager","kål"] },
-  { name:"Fennikelsuppe med østers", url:"https://carinas.dk/ddv/fennikelsuppe-med-osters/", tags:["fennikel","østers"] },
-  { name:"Hvidløgssuppe med revet ost", url:"https://carinas.dk/ddv/hvidløgssuppe-med-revet-ost/", tags:["hvidløg","ost"] },
+  { name:"Broccolisuppe", url:"https://carinas.dk/ddv/broccolisuppe/", tags:["broccoli"], categories:["suppe","vegetar"] },
+  { name:"Cremet hokaidosuppe", url:"https://carinas.dk/ddv/cremet-hokaidosuppe/", tags:["hokaido","græskar"], categories:["suppe","vegetar"] },
+  { name:"Fiskesuppe med jordskok", url:"https://carinas.dk/ddv/fiskesuppe-med-jordskok/", tags:["fisk","jordskok"], categories:["suppe","fisk"] },
+  { name:"Fyldig suppe med laks og rejer", url:"https://carinas.dk/ddv/fyldig-suppe-med-laks-og-rejer/", tags:["laks","rejer"], categories:["suppe","fisk","skaldyr"] },
+  { name:"Gazpachosuppe med æg og grønt", url:"https://carinas.dk/ddv/gazpachosuppe-med-aeg-og-groent/", tags:["tomat","æg","agurk"], categories:["suppe","vegetar","æg"] },
+  { name:"Gulerods/appelsinsuppe", url:"https://carinas.dk/ddv/gulerodsappelsinsuppe/", tags:["gulerod","appelsin"], categories:["suppe","vegetar"] },
+  { name:"Gulerodssuppe med frisk ost", url:"https://carinas.dk/ddv/gulerodssuppe-med-frisk-ost/", tags:["gulerod","ost"], categories:["suppe","vegetar","mejeri"] },
+  { name:"Kalorielet tomatsuppe", url:"https://carinas.dk/ddv/kalorielet-tomatsuppe/", tags:["tomat"], categories:["suppe","vegetar"] },
+  { name:"Karrysuppe med mango & rejer", url:"https://carinas.dk/ddv/karrysuppe-med-mango-rejer/", tags:["karry","mango","rejer"], categories:["suppe","skaldyr"] },
+  { name:"Klar suppe med grønsager og kødboller", url:"https://carinas.dk/ddv/klar-suppe-med-groensager-og-koedboller/", tags:["hakket kød","grøntsager"], categories:["suppe","oksekød"] },
+  { name:"Løgsuppe", url:"https://carinas.dk/ddv/løgsuppe/", tags:["løg","ost"], categories:["suppe","vegetar","mejeri"] },
+  { name:"Nem bagt tomatsuppe", url:"https://carinas.dk/ddv/nem-bagt-tomatsuppe/", tags:["tomat"], categories:["suppe","vegetar"] },
+  { name:"Sellerisuppe med kokosmælk", url:"https://carinas.dk/ddv/sellerisuppe-med-kokosmælk/", tags:["selleri","kokosmælk"], categories:["suppe","vegetar"] },
+  { name:"Skaldyrssuppe", url:"https://carinas.dk/ddv/skaldyrssuppe/", tags:["rejer","muslinger","skaldyr"], categories:["suppe","skaldyr"] },
+  { name:"Stærk gullashsuppe", url:"https://carinas.dk/ddv/staerk-gullaschsuppe/", tags:["oksekød","paprika","chili"], categories:["suppe","oksekød"] },
+  { name:"Thaisuppe med sugarsnaps", url:"https://carinas.dk/ddv/thaisuppe-med-sugarsnaps/", tags:["chili","ingefær","sugarsnaps"], categories:["suppe","vegetar"] },
+  { name:"Tomatsuppe", url:"https://carinas.dk/ddv/tomatsuppe/", tags:["tomat"], categories:["suppe","vegetar"] },
+  { name:"Forbrændingssuppe", url:"https://carinas.dk/ddv/forbrændingssuppe/", tags:["grøntsager","kål"], categories:["suppe","vegetar"] },
+  { name:"Fennikelsuppe med østers", url:"https://carinas.dk/ddv/fennikelsuppe-med-osters/", tags:["fennikel","østers"], categories:["suppe","skaldyr"] },
+  { name:"Hvidløgssuppe med revet ost", url:"https://carinas.dk/ddv/hvidløgssuppe-med-revet-ost/", tags:["hvidløg","ost"], categories:["suppe","vegetar","mejeri"] },
 ];
 
 const FROKOST = [
-  { name:"Hønsesalat", url:"https://carinas.dk/ddv/hønsesalat/", tags:["kylling","salat","mayonnaise"] },
-  { name:"Kyllingesalat", url:"https://carinas.dk/ddv/kyllingesalat/", tags:["kylling","salat"] },
-  { name:"Sandwich med kylling", url:"https://carinas.dk/ddv/sandwich-med-kylling/", tags:["kylling","brød"] },
-  { name:"Roastbeef med waldorfsalat", url:"https://carinas.dk/ddv/roastbeef-med-waldorfsalat/", tags:["roastbeef","nødder","selleri","æble"] },
-  { name:"Omelet med svampe", url:"https://carinas.dk/ddv/omelet-med-svampe/", tags:["æg","svampe"] },
-  { name:"Grøn æggesalat", url:"https://carinas.dk/ddv/grøn-æggesalat/", tags:["æg","grøntsager"] },
-  { name:"Rejesalat", url:"https://carinas.dk/ddv/rejesalat/", tags:["rejer","salat"] },
-  { name:"Klassisk rejesalat", url:"https://carinas.dk/ddv/klassisk-rejesalat/", tags:["rejer","mayonnaise"] },
-  { name:"Røget laks med spinat og røræg", url:"https://carinas.dk/ddv/røget-laks-med-stuvet-spinat-og-røræg/", tags:["laks","spinat","æg"] },
-  { name:"Røget makrel med radisesalat", url:"https://carinas.dk/ddv/røget-makrel-med-radisesalat/", tags:["makrel","radise"] },
-  { name:"Salade nicoise", url:"https://carinas.dk/ddv/salade-nicoise/", tags:["tun","æg","oliven"] },
-  { name:"Tun i lun nicoisesalat", url:"https://carinas.dk/ddv/tun-i-lun-nicoisesalat/", tags:["tun","salat"] },
-  { name:"Provence tunsalat", url:"https://carinas.dk/ddv/provence-tunsalat/", tags:["tun","salat"] },
-  { name:"Laksecreme med salat & granatæble", url:"https://carinas.dk/ddv/laksecreme/", tags:["laks","granatæble"] },
-  { name:"DDV frikadeller", url:"https://carinas.dk/ddv/ddv-frikadeller/", tags:["hakket kød","frikadeller"] },
-  { name:"Scrambled eggs og sprød skinke", url:"https://carinas.dk/ddv/scrambled-eggs-sprød-skinke/", tags:["æg","skinke"] },
-  { name:"Tortillawraps med kylling", url:"https://carinas.dk/ddv/tortillawraps-med-kylling/", tags:["kylling","tortilla"] },
-  { name:"Frokost pizza", url:"https://carinas.dk/ddv/frokost-pizza/", tags:["pizza","tomatsauce"] },
-  { name:"Spinatsalat med oksespegepølse", url:"https://carinas.dk/ddv/spinatsalat-med-oksespegepølse/", tags:["spinat","pølse"] },
-  { name:"Salat med kylling og linser", url:"https://carinas.dk/ddv/salat-med-kylling-og-linser/", tags:["kylling","linser","salat"] },
-  { name:"Melon med spegeskinke", url:"https://carinas.dk/ddv/melon-med-spegeskinke/", tags:["melon","skinke"] },
-  { name:"Lever med løg og æble", url:"https://carinas.dk/ddv/lever-med-løg-og-æble/", tags:["lever","løg","æble"] },
-  { name:"Sandwich med skinke og avocado", url:"https://carinas.dk/ddv/sandwich-med-skinke-og-avocado/", tags:["skinke","avocado","brød"] },
-  { name:"Bulgursalat med rejer, hvidløg og basilikum", url:"https://carinas.dk/ddv/bulgursalat-med-rejer-hvidlog-og-basilikum/", tags:["rejer","bulgur","hvidløg"] },
-  { name:"Pastasalat med rejer", url:"https://carinas.dk/ddv/pastasalat-med-rejer/", tags:["rejer","pasta"] },
-  { name:"Burger", url:"https://carinas.dk/ddv/burger/", tags:["oksekød","brød"] },
-  { name:"Madmuffins med skinke", url:"https://carinas.dk/ddv/madmuffins-med-skinke/", tags:["skinke","æg"] },
-  { name:"Karrykylling med rodfrugtsalat", url:"https://carinas.dk/ddv/karrykylling-med-rodfrugtsalat/", tags:["kylling","karry","rodfrugter"] },
-  { name:"Avokado-jordbærsalat med kylling", url:"https://carinas.dk/ddv/avokado-jordbærsalat-med-kylling/", tags:["avocado","jordbær","kylling"] },
-  { name:"Rygeost salat", url:"https://carinas.dk/ddv/rygeost-salat/", tags:["rygeost","salat"] },
-  { name:"Hønsesalat med asparges & champignon", url:"https://carinas.dk/ddv/hønsesalat-med-aspages-og-champignon/", tags:["kylling","asparges","svampe"] },
+  { name:"Hønsesalat", url:"https://carinas.dk/ddv/hønsesalat/", tags:["kylling","salat","mayonnaise"], categories:["kylling"] },
+  { name:"Kyllingesalat", url:"https://carinas.dk/ddv/kyllingesalat/", tags:["kylling","salat"], categories:["kylling"] },
+  { name:"Sandwich med kylling", url:"https://carinas.dk/ddv/sandwich-med-kylling/", tags:["kylling","brød"], categories:["kylling","brød"] },
+  { name:"Roastbeef med waldorfsalat", url:"https://carinas.dk/ddv/roastbeef-med-waldorfsalat/", tags:["roastbeef","nødder","selleri","æble"], categories:["oksekød"] },
+  { name:"Omelet med svampe", url:"https://carinas.dk/ddv/omelet-med-svampe/", tags:["æg","svampe"], categories:["æg","vegetar"] },
+  { name:"Grøn æggesalat", url:"https://carinas.dk/ddv/grøn-æggesalat/", tags:["æg","grøntsager"], categories:["æg","vegetar"] },
+  { name:"Rejesalat", url:"https://carinas.dk/ddv/rejesalat/", tags:["rejer","salat"], categories:["skaldyr"] },
+  { name:"Klassisk rejesalat", url:"https://carinas.dk/ddv/klassisk-rejesalat/", tags:["rejer","mayonnaise"], categories:["skaldyr"] },
+  { name:"Røget laks med spinat og røræg", url:"https://carinas.dk/ddv/røget-laks-med-stuvet-spinat-og-røræg/", tags:["laks","spinat","æg"], categories:["fisk","æg"] },
+  { name:"Røget makrel med radisesalat", url:"https://carinas.dk/ddv/røget-makrel-med-radisesalat/", tags:["makrel","radise"], categories:["fisk"] },
+  { name:"Salade nicoise", url:"https://carinas.dk/ddv/salade-nicoise/", tags:["tun","æg","oliven"], categories:["fisk","æg"] },
+  { name:"Tun i lun nicoisesalat", url:"https://carinas.dk/ddv/tun-i-lun-nicoisesalat/", tags:["tun","salat"], categories:["fisk"] },
+  { name:"Provence tunsalat", url:"https://carinas.dk/ddv/provence-tunsalat/", tags:["tun","salat"], categories:["fisk"] },
+  { name:"Laksecreme med salat & granatæble", url:"https://carinas.dk/ddv/laksecreme/", tags:["laks","granatæble"], categories:["fisk"] },
+  { name:"DDV frikadeller", url:"https://carinas.dk/ddv/ddv-frikadeller/", tags:["hakket kød","frikadeller"], categories:["svinekød"] },
+  { name:"Scrambled eggs og sprød skinke", url:"https://carinas.dk/ddv/scrambled-eggs-sprød-skinke/", tags:["æg","skinke"], categories:["æg","svinekød"] },
+  { name:"Tortillawraps med kylling", url:"https://carinas.dk/ddv/tortillawraps-med-kylling/", tags:["kylling","tortilla"], categories:["kylling","brød"] },
+  { name:"Frokost pizza", url:"https://carinas.dk/ddv/frokost-pizza/", tags:["pizza","tomatsauce"], categories:["vegetar","brød"] },
+  { name:"Spinatsalat med oksespegepølse", url:"https://carinas.dk/ddv/spinatsalat-med-oksespegepølse/", tags:["spinat","pølse"], categories:["oksekød"] },
+  { name:"Salat med kylling og linser", url:"https://carinas.dk/ddv/salat-med-kylling-og-linser/", tags:["kylling","linser","salat"], categories:["kylling"] },
+  { name:"Melon med spegeskinke", url:"https://carinas.dk/ddv/melon-med-spegeskinke/", tags:["melon","skinke"], categories:["svinekød","frugt"] },
+  { name:"Lever med løg og æble", url:"https://carinas.dk/ddv/lever-med-løg-og-æble/", tags:["lever","løg","æble"], categories:["indmad"] },
+  { name:"Sandwich med skinke og avocado", url:"https://carinas.dk/ddv/sandwich-med-skinke-og-avocado/", tags:["skinke","avocado","brød"], categories:["svinekød","brød"] },
+  { name:"Bulgursalat med rejer, hvidløg og basilikum", url:"https://carinas.dk/ddv/bulgursalat-med-rejer-hvidlog-og-basilikum/", tags:["rejer","bulgur","hvidløg"], categories:["skaldyr"] },
+  { name:"Pastasalat med rejer", url:"https://carinas.dk/ddv/pastasalat-med-rejer/", tags:["rejer","pasta"], categories:["skaldyr"] },
+  { name:"Burger", url:"https://carinas.dk/ddv/burger/", tags:["oksekød","brød"], categories:["oksekød","brød"] },
+  { name:"Madmuffins med skinke", url:"https://carinas.dk/ddv/madmuffins-med-skinke/", tags:["skinke","æg"], categories:["svinekød","æg"] },
+  { name:"Karrykylling med rodfrugtsalat", url:"https://carinas.dk/ddv/karrykylling-med-rodfrugtsalat/", tags:["kylling","karry","rodfrugter"], categories:["kylling"] },
+  { name:"Avokado-jordbærsalat med kylling", url:"https://carinas.dk/ddv/avokado-jordbærsalat-med-kylling/", tags:["avocado","jordbær","kylling"], categories:["kylling","frugt"] },
+  { name:"Rygeost salat", url:"https://carinas.dk/ddv/rygeost-salat/", tags:["rygeost","salat"], categories:["vegetar","mejeri"] },
+  { name:"Hønsesalat med asparges & champignon", url:"https://carinas.dk/ddv/hønsesalat-med-aspages-og-champignon/", tags:["kylling","asparges","svampe"], categories:["kylling"] },
 ];
 
 const MIDDAG = [
-  { name:"DDV frikadeller", url:"https://carinas.dk/ddv/ddv-frikadeller/", tags:["hakket kød"] },
-  { name:"Grillet kylling med kartoffelsalat", url:"https://carinas.dk/ddv/grillet-kylling-med-kartoffelsalat/", tags:["kylling","kartoffel"] },
-  { name:"Kylling i tomat-sellerisauce", url:"https://carinas.dk/ddv/kylling-i-tomat-sellerisovs/", tags:["kylling","tomat","selleri"] },
-  { name:"Helstegt citronkylling", url:"https://carinas.dk/ddv/helstegt-citronkylling/", tags:["kylling","citron"] },
-  { name:"Stegt laks med spinat og kartoffelbåde", url:"https://carinas.dk/ddv/stegt-laks-med-spinat-og-kartoffelbåde/", tags:["laks","spinat","kartoffel"] },
-  { name:"Grillet dildlaks med blomkål & tahindressing", url:"https://carinas.dk/ddv/grillet-dildlaks-med-blomkål-tahindressing/", tags:["laks","dild","blomkål"] },
-  { name:"Spaghetti med kødsauce", url:"https://carinas.dk/ddv/spaghetti-med-kødsauce/", tags:["oksekød","pasta","tomat"] },
-  { name:"Peberbøf med svampesauce", url:"https://carinas.dk/ddv/peberbøf-med-svampesauce/", tags:["oksekød","svampe","peber"] },
-  { name:"Mørbrad med kantareller", url:"https://carinas.dk/ddv/moerbrad-med-kantareller/", tags:["svinekød","svampe"] },
-  { name:"Boller i karry", url:"https://carinas.dk/ddv/boller-i-karry/", tags:["hakket kød","karry","ris"] },
-  { name:"Frikadeller med stuvet hvidkål", url:"https://carinas.dk/ddv/frikadeller-med-stuvet-hvidkål/", tags:["hakket kød","hvidkål"] },
-  { name:"Chili con carne med ærte guacamole", url:"https://carinas.dk/ddv/chili-con-carne-med-ærte-guacamole/", tags:["chili","oksekød","bønner","avocado"] },
-  { name:"Kalvefrikasse med grønsager", url:"https://carinas.dk/ddv/kalvefrikasse-med-grønsager/", tags:["kalv","grøntsager"] },
-  { name:"Tandoori kylling", url:"https://carinas.dk/ddv/tandoori-kylling/", tags:["kylling","yoghurt","krydderier"] },
-  { name:"Fiskelasagne", url:"https://carinas.dk/ddv/fiskelasagne/", tags:["fisk","pasta","bechamel"] },
-  { name:"Kogt torsk med sennepssauce & garniture", url:"https://carinas.dk/ddv/kogt-torsk-med-sennepssauce-garniture/", tags:["torsk","sennep"] },
-  { name:"Sprødstegt laks med grønsager", url:"https://carinas.dk/ddv/sprødstegt-laks-med-grønsager/", tags:["laks","grøntsager"] },
-  { name:"Grydesteg med rodfrugter", url:"https://carinas.dk/ddv/grydesteg-med-rodfrugter/", tags:["oksekød","rodfrugter"] },
-  { name:"Gullash", url:"https://carinas.dk/ddv/gullash/", tags:["oksekød","paprika","tomat"] },
-  { name:"Krydret lammegryde", url:"https://carinas.dk/ddv/krydret-lammegryde/", tags:["lam","krydderier"] },
-  { name:"Kylling á la orange", url:"https://carinas.dk/ddv/kylling-med-appelsinsauce/", tags:["kylling","appelsin"] },
-  { name:"Flæskesteg med peberrods-æblemos", url:"https://carinas.dk/ddv/flaeskesteg-med-peberrods-æblemos/", tags:["svinekød","peberrod","æble"] },
-  { name:"Wokgryde med skinketern i østerssauce", url:"https://carinas.dk/ddv/wokgryde-med-skinketern-i-østerssauce/", tags:["skinke","wok"] },
-  { name:"Kylling i chili", url:"https://carinas.dk/ddv/kylling-i-chili/", tags:["kylling","chili"] },
-  { name:"Chicken garam masala", url:"https://carinas.dk/ddv/chicken-garam-masala/", tags:["kylling","karry","krydderier"] },
-  { name:"Stegt makrel med hvidløgsspinat", url:"https://carinas.dk/ddv/stegt-makrel-med-hvidløgsspinat/", tags:["makrel","hvidløg","spinat"] },
-  { name:"Surf & turf", url:"https://carinas.dk/ddv/surf-turf/", tags:["oksekød","rejer"] },
-  { name:"Kalkungryde med kartoffel-urte-mos", url:"https://carinas.dk/ddv/kalkungryde-med-kartoffel-urte-mos/", tags:["kalkun","kartoffel"] },
-  { name:"Lasagne med bechamelsauce", url:"https://carinas.dk/ddv/lasagne-med-bechamelsauce/", tags:["oksekød","pasta","bechamel"] },
-  { name:"Paella", url:"https://carinas.dk/ddv/paella/", tags:["rejer","ris","paprika"] },
-  { name:"Kyllingelår med grov rodfrugtmos", url:"https://carinas.dk/ddv/kyllingelår-med-grov-rodfrugtmos/", tags:["kylling","rodfrugter"] },
-  { name:"Helstegt svinekam med rødkål & svampesauce", url:"https://carinas.dk/ddv/helstegt-svinekam-med-rødkal-svampesauce/", tags:["svinekød","rødkål","svampe"] },
-  { name:"Forloren hare med bagte jordskokker", url:"https://carinas.dk/ddv/forloren-hare/", tags:["hakket kød","jordskok"] },
-  { name:"Stegt lam med aubergine og granatæble", url:"https://carinas.dk/ddv/stegt-lam-med-aubergine-granatæble/", tags:["lam","aubergine"] },
-  { name:"Svinekotelet med grillede rabarber", url:"https://carinas.dk/ddv/svinekotelet-med-grillede-rabarber/", tags:["svinekød","rabarber"] },
+  { name:"DDV frikadeller", url:"https://carinas.dk/ddv/ddv-frikadeller/", tags:["hakket kød"], categories:["svinekød"] },
+  { name:"Grillet kylling med kartoffelsalat", url:"https://carinas.dk/ddv/grillet-kylling-med-kartoffelsalat/", tags:["kylling","kartoffel"], categories:["kylling"] },
+  { name:"Kylling i tomat-sellerisauce", url:"https://carinas.dk/ddv/kylling-i-tomat-sellerisovs/", tags:["kylling","tomat","selleri"], categories:["kylling"] },
+  { name:"Helstegt citronkylling", url:"https://carinas.dk/ddv/helstegt-citronkylling/", tags:["kylling","citron"], categories:["kylling"] },
+  { name:"Stegt laks med spinat og kartoffelbåde", url:"https://carinas.dk/ddv/stegt-laks-med-spinat-og-kartoffelbåde/", tags:["laks","spinat","kartoffel"], categories:["fisk"] },
+  { name:"Grillet dildlaks med blomkål & tahindressing", url:"https://carinas.dk/ddv/grillet-dildlaks-med-blomkål-tahindressing/", tags:["laks","dild","blomkål"], categories:["fisk"] },
+  { name:"Spaghetti med kødsauce", url:"https://carinas.dk/ddv/spaghetti-med-kødsauce/", tags:["oksekød","pasta","tomat"], categories:["oksekød"] },
+  { name:"Peberbøf med svampesauce", url:"https://carinas.dk/ddv/peberbøf-med-svampesauce/", tags:["oksekød","svampe","peber"], categories:["oksekød"] },
+  { name:"Mørbrad med kantareller", url:"https://carinas.dk/ddv/moerbrad-med-kantareller/", tags:["svinekød","svampe"], categories:["svinekød"] },
+  { name:"Boller i karry", url:"https://carinas.dk/ddv/boller-i-karry/", tags:["hakket kød","karry","ris"], categories:["svinekød"] },
+  { name:"Frikadeller med stuvet hvidkål", url:"https://carinas.dk/ddv/frikadeller-med-stuvet-hvidkål/", tags:["hakket kød","hvidkål"], categories:["svinekød"] },
+  { name:"Chili con carne med ærte guacamole", url:"https://carinas.dk/ddv/chili-con-carne-med-ærte-guacamole/", tags:["chili","oksekød","bønner","avocado"], categories:["oksekød"] },
+  { name:"Kalvefrikasse med grønsager", url:"https://carinas.dk/ddv/kalvefrikasse-med-grønsager/", tags:["kalv","grøntsager"], categories:["oksekød"] },
+  { name:"Tandoori kylling", url:"https://carinas.dk/ddv/tandoori-kylling/", tags:["kylling","yoghurt","krydderier"], categories:["kylling"] },
+  { name:"Fiskelasagne", url:"https://carinas.dk/ddv/fiskelasagne/", tags:["fisk","pasta","bechamel"], categories:["fisk"] },
+  { name:"Kogt torsk med sennepssauce & garniture", url:"https://carinas.dk/ddv/kogt-torsk-med-sennepssauce-garniture/", tags:["torsk","sennep"], categories:["fisk"] },
+  { name:"Sprødstegt laks med grønsager", url:"https://carinas.dk/ddv/sprødstegt-laks-med-grønsager/", tags:["laks","grøntsager"], categories:["fisk"] },
+  { name:"Grydesteg med rodfrugter", url:"https://carinas.dk/ddv/grydesteg-med-rodfrugter/", tags:["oksekød","rodfrugter"], categories:["oksekød"] },
+  { name:"Gullash", url:"https://carinas.dk/ddv/gullash/", tags:["oksekød","paprika","tomat"], categories:["oksekød"] },
+  { name:"Krydret lammegryde", url:"https://carinas.dk/ddv/krydret-lammegryde/", tags:["lam","krydderier"], categories:["lam"] },
+  { name:"Kylling á la orange", url:"https://carinas.dk/ddv/kylling-med-appelsinsauce/", tags:["kylling","appelsin"], categories:["kylling"] },
+  { name:"Flæskesteg med peberrods-æblemos", url:"https://carinas.dk/ddv/flaeskesteg-med-peberrods-æblemos/", tags:["svinekød","peberrod","æble"], categories:["svinekød"] },
+  { name:"Wokgryde med skinketern i østerssauce", url:"https://carinas.dk/ddv/wokgryde-med-skinketern-i-østerssauce/", tags:["skinke","wok"], categories:["svinekød"] },
+  { name:"Kylling i chili", url:"https://carinas.dk/ddv/kylling-i-chili/", tags:["kylling","chili"], categories:["kylling"] },
+  { name:"Chicken garam masala", url:"https://carinas.dk/ddv/chicken-garam-masala/", tags:["kylling","karry","krydderier"], categories:["kylling"] },
+  { name:"Stegt makrel med hvidløgsspinat", url:"https://carinas.dk/ddv/stegt-makrel-med-hvidløgsspinat/", tags:["makrel","hvidløg","spinat"], categories:["fisk"] },
+  { name:"Surf & turf", url:"https://carinas.dk/ddv/surf-turf/", tags:["oksekød","rejer"], categories:["oksekød","skaldyr"] },
+  { name:"Kalkungryde med kartoffel-urte-mos", url:"https://carinas.dk/ddv/kalkungryde-med-kartoffel-urte-mos/", tags:["kalkun","kartoffel"], categories:["kalkun"] },
+  { name:"Lasagne med bechamelsauce", url:"https://carinas.dk/ddv/lasagne-med-bechamelsauce/", tags:["oksekød","pasta","bechamel"], categories:["oksekød"] },
+  { name:"Paella", url:"https://carinas.dk/ddv/paella/", tags:["rejer","ris","paprika"], categories:["skaldyr"] },
+  { name:"Kyllingelår med grov rodfrugtmos", url:"https://carinas.dk/ddv/kyllingelår-med-grov-rodfrugtmos/", tags:["kylling","rodfrugter"], categories:["kylling"] },
+  { name:"Helstegt svinekam med rødkål & svampesauce", url:"https://carinas.dk/ddv/helstegt-svinekam-med-rødkal-svampesauce/", tags:["svinekød","rødkål","svampe"], categories:["svinekød"] },
+  { name:"Forloren hare med bagte jordskokker", url:"https://carinas.dk/ddv/forloren-hare/", tags:["hakket kød","jordskok"], categories:["svinekød"] },
+  { name:"Stegt lam med aubergine og granatæble", url:"https://carinas.dk/ddv/stegt-lam-med-aubergine-granatæble/", tags:["lam","aubergine"], categories:["lam"] },
+  { name:"Svinekotelet med grillede rabarber", url:"https://carinas.dk/ddv/svinekotelet-med-grillede-rabarber/", tags:["svinekød","rabarber"], categories:["svinekød"] },
 ];
 
 const DESSERT = [
-  { name:"Frugtsalat", url:"https://carinas.dk/ddv/frugtsalat/", tags:["frugt"], frugt:2, note:"Tæller 2 frugter" },
-  { name:"Jordbærdessert med skyr og myntesukker", url:"https://carinas.dk/ddv/jordbærdessert-med-skyr-og-myntesukker/", tags:["jordbær","skyr"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Jordbærgrød", url:"https://carinas.dk/ddv/jordbærgrød/", tags:["jordbær"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Bagt æble og svesker med kokos og mandler", url:"https://carinas.dk/ddv/bagt-æble-og-svesker-med-kokos-og-mandler/", tags:["æble","svesker","kokos","mandler"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Kanelæbler", url:"https://carinas.dk/ddv/kanelæbler/", tags:["æble","kanel"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Citronmousse med appelsin/brombær", url:"https://carinas.dk/ddv/citronmousse-med-appelsinbrombaer/", tags:["citron","appelsin","brombær"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Appelsinfromage", url:"https://carinas.dk/ddv/appelsinfromage/", tags:["appelsin"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Melonsalat med passionsfrugtsovs", url:"https://carinas.dk/ddv/melonsalat-med-passionsfrugtsovs/", tags:["melon","passionsfrugt"], frugt:2, note:"Tæller 2 frugter" },
-  { name:"Bagte blommer", url:"https://carinas.dk/ddv/bagte-blommer/", tags:["blommer"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Bærfromage", url:"https://carinas.dk/ddv/bærfromage/", tags:["bær"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Bærdessert med creme og nøddeblanding", url:"https://carinas.dk/ddv/bærdessert-med-creme-og-nøddeblanding/", tags:["bær","nødder"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Ananas bagt i frugtsaft", url:"https://carinas.dk/ddv/ananas-bagt-i-frugtsaft/", tags:["ananas"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Grillet frugtspyd", url:"https://carinas.dk/ddv/grillet-frugtspyd/", tags:["frugt","ananas","jordbær"], frugt:2, note:"Tæller 2 frugter" },
-  { name:"Jordbærsorbet med hyldeblomst", url:"https://carinas.dk/ddv/jordbærsorbet-med-hyldeblomst/", tags:["jordbær"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Chokolademousse med pæresorbet", url:"https://carinas.dk/ddv/chokolademousse-med-pæresorbet/", tags:["pære","chokolade"], frugt:1, note:"Tæller 1 frugt (ekstra)" },
-  { name:"Ferskenfromage med hindbær", url:"https://carinas.dk/ddv/ferskenfromage-med-hindbær/", tags:["fersken","hindbær"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Choko-hindbærmousse", url:"https://carinas.dk/ddv/choko-hindbærmousse/", tags:["hindbær","chokolade"], frugt:1, note:"Tæller 1 frugt (ekstra)" },
-  { name:"Krydret æble/pærekompot", url:"https://carinas.dk/ddv/krydret-æble-pærekompot/", tags:["æble","pære"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Rabarbermousse", url:"https://carinas.dk/ddv/rabarbermousse/", tags:["rabarber"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Mangosorbet", url:"https://carinas.dk/ddv/mangosorbet/", tags:["mango"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Frugter i yoghurt", url:"https://carinas.dk/ddv/frugter-i-ddv-yoghurt/", tags:["frugt","yoghurt"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Trifli med rabarber og jordbær", url:"https://carinas.dk/ddv/trifli-med-rabarber-og-jordbær/", tags:["rabarber","jordbær","yoghurt"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Jordbær softice", url:"https://carinas.dk/ddv/jordbaersoftice/", tags:["jordbær"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Pære med After Eight creme", url:"https://carinas.dk/ddv/pære-med-after-eight-creme/", tags:["pære","chokolade"], frugt:1, note:"Tæller 1 frugt" },
-  { name:"Æble med mandelfyld", url:"https://carinas.dk/ddv/æble-med-mandelfyld/", tags:["æble","mandler","nødder"], frugt:1, note:"Tæller 1 frugt" },
+  { name:"Frugtsalat", url:"https://carinas.dk/ddv/frugtsalat/", tags:["frugt"], frugt:2, note:"Tæller 2 frugter", categories:["dessert","frugt"] },
+  { name:"Jordbærdessert med skyr og myntesukker", url:"https://carinas.dk/ddv/jordbærdessert-med-skyr-og-myntesukker/", tags:["jordbær","skyr"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt","mejeri"] },
+  { name:"Jordbærgrød", url:"https://carinas.dk/ddv/jordbærgrød/", tags:["jordbær"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
+  { name:"Bagt æble og svesker med kokos og mandler", url:"https://carinas.dk/ddv/bagt-æble-og-svesker-med-kokos-og-mandler/", tags:["æble","svesker","kokos","mandler"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
+  { name:"Kanelæbler", url:"https://carinas.dk/ddv/kanelæbler/", tags:["æble","kanel"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
+  { name:"Citronmousse med appelsin/brombær", url:"https://carinas.dk/ddv/citronmousse-med-appelsinbrombaer/", tags:["citron","appelsin","brombær"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
+  { name:"Appelsinfromage", url:"https://carinas.dk/ddv/appelsinfromage/", tags:["appelsin"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
+  { name:"Melonsalat med passionsfrugtsovs", url:"https://carinas.dk/ddv/melonsalat-med-passionsfrugtsovs/", tags:["melon","passionsfrugt"], frugt:2, note:"Tæller 2 frugter", categories:["dessert","frugt"] },
+  { name:"Bagte blommer", url:"https://carinas.dk/ddv/bagte-blommer/", tags:["blommer"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
+  { name:"Bærfromage", url:"https://carinas.dk/ddv/bærfromage/", tags:["bær"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt","mejeri"] },
+  { name:"Bærdessert med creme og nøddeblanding", url:"https://carinas.dk/ddv/bærdessert-med-creme-og-nøddeblanding/", tags:["bær","nødder"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt","mejeri"] },
+  { name:"Ananas bagt i frugtsaft", url:"https://carinas.dk/ddv/ananas-bagt-i-frugtsaft/", tags:["ananas"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
+  { name:"Grillet frugtspyd", url:"https://carinas.dk/ddv/grillet-frugtspyd/", tags:["frugt","ananas","jordbær"], frugt:2, note:"Tæller 2 frugter", categories:["dessert","frugt"] },
+  { name:"Jordbærsorbet med hyldeblomst", url:"https://carinas.dk/ddv/jordbærsorbet-med-hyldeblomst/", tags:["jordbær"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
+  { name:"Chokolademousse med pæresorbet", url:"https://carinas.dk/ddv/chokolademousse-med-pæresorbet/", tags:["pære","chokolade"], frugt:1, note:"Tæller 1 frugt (ekstra)", categories:["dessert","frugt"] },
+  { name:"Ferskenfromage med hindbær", url:"https://carinas.dk/ddv/ferskenfromage-med-hindbær/", tags:["fersken","hindbær"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt","mejeri"] },
+  { name:"Choko-hindbærmousse", url:"https://carinas.dk/ddv/choko-hindbærmousse/", tags:["hindbær","chokolade"], frugt:1, note:"Tæller 1 frugt (ekstra)", categories:["dessert","frugt"] },
+  { name:"Krydret æble/pærekompot", url:"https://carinas.dk/ddv/krydret-æble-pærekompot/", tags:["æble","pære"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
+  { name:"Rabarbermousse", url:"https://carinas.dk/ddv/rabarbermousse/", tags:["rabarber"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
+  { name:"Mangosorbet", url:"https://carinas.dk/ddv/mangosorbet/", tags:["mango"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
+  { name:"Frugter i yoghurt", url:"https://carinas.dk/ddv/frugter-i-ddv-yoghurt/", tags:["frugt","yoghurt"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt","mejeri"] },
+  { name:"Trifli med rabarber og jordbær", url:"https://carinas.dk/ddv/trifli-med-rabarber-og-jordbær/", tags:["rabarber","jordbær","yoghurt"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt","mejeri"] },
+  { name:"Jordbær softice", url:"https://carinas.dk/ddv/jordbaersoftice/", tags:["jordbær"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt","mejeri"] },
+  { name:"Pære med After Eight creme", url:"https://carinas.dk/ddv/pære-med-after-eight-creme/", tags:["pære","chokolade"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt","mejeri"] },
+  { name:"Æble med mandelfyld", url:"https://carinas.dk/ddv/æble-med-mandelfyld/", tags:["æble","mandler","nødder"], frugt:1, note:"Tæller 1 frugt", categories:["dessert","frugt"] },
 ];
 
 const DAYS = ["Mandag","Tirsdag","Onsdag","Torsdag","Fredag","Lørdag","Søndag"];
@@ -688,11 +693,22 @@ function shuffle(arr) {
   return a;
 }
 
-function filterOut(list, avoid) {
-  if (!avoid.length) return list;
-  return list.filter(item =>
-    !avoid.some(w => item.tags.some(t => t.toLowerCase().includes(w)) || item.name.toLowerCase().includes(w))
-  );
+function filterOut(list, avoidIngredients, avoidCategories = []) {
+  return list.filter(item => {
+    const itemName = item.name.toLowerCase();
+    const itemTags = (item.tags || []).map(t => t.toLowerCase());
+    const itemCategories = (item.categories || []).map(c => c.toLowerCase());
+
+    const hasAvoidedIngredient = avoidIngredients.some(word =>
+      itemTags.some(tag => tag.includes(word)) || itemName.includes(word)
+    );
+
+    const hasAvoidedCategory = avoidCategories.some(cat =>
+      itemCategories.includes(cat)
+    );
+
+    return !hasAvoidedIngredient && !hasAvoidedCategory;
+  });
 }
 
 function pickUnique(list, used, count) {
@@ -719,17 +735,19 @@ function generateMenu() {
   const persons = document.getElementById('persons').value;
   const avoidRaw = document.getElementById('avoid').value.toLowerCase().trim();
   const avoid = avoidRaw ? avoidRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+  const avoidCategoriesRaw = document.getElementById('avoidCategories').value.toLowerCase().trim();
+  const avoidCategories = avoidCategoriesRaw ? avoidCategoriesRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
 
   const isMale = persons.includes('m');
   const numPersons = persons.startsWith('2') ? 2 : 1;
   const mixed = persons === '2mk';
   const totalDays = weeks * 7;
 
-  const fM  = filterOut(MORGENMAD, avoid);
-  const fF  = filterOut(FROKOST, avoid);
-  const fS  = filterOut(SUPPER, avoid);
-  const fD  = filterOut(MIDDAG, avoid);
-  const fDes = filterOut(DESSERT, avoid);
+  const fM  = filterOut(MORGENMAD, avoid, avoidCategories);
+  const fF  = filterOut(FROKOST, avoid, avoidCategories);
+  const fS  = filterOut(SUPPER, avoid, avoidCategories);
+  const fD  = filterOut(MIDDAG, avoid, avoidCategories);
+  const fDes = filterOut(DESSERT, avoid, avoidCategories);
 
   const frokostPool = shuffle([...fF, ...fS.slice(0, Math.ceil(fS.length/2))]);
   const middagPool  = shuffle([...fD, ...fS.slice(Math.ceil(fS.length/2))]);
