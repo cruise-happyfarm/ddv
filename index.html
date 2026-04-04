@@ -498,10 +498,21 @@ main {
       <input type="text" id="avoid" placeholder="fx: agurk, chili, rejer, nødder...">
     </div>
 
-    <div class="field-full">
-      <label>Kategorier jeg vil undgå (kommasepareret)</label>
-      <input type="text" id="avoidCategories" placeholder="fx: fisk, skaldyr, svinekød, supper...">
+  <div class="field-full">
+    <label>Kategorier jeg vil undgå</label>
+    <div class="toggle-group" id="categoryFilters">
+      <button type="button" class="toggle-btn category-btn" data-category="fisk">Fisk</button>
+      <button type="button" class="toggle-btn category-btn" data-category="skaldyr">Skaldyr</button>
+      <button type="button" class="toggle-btn category-btn" data-category="kylling">Kylling</button>
+      <button type="button" class="toggle-btn category-btn" data-category="kalkun">Kalkun</button>
+      <button type="button" class="toggle-btn category-btn" data-category="oksekød">Oksekød</button>
+      <button type="button" class="toggle-btn category-btn" data-category="svinekød">Svinekød</button>
+      <button type="button" class="toggle-btn category-btn" data-category="lam">Lam</button>
+      <button type="button" class="toggle-btn category-btn" data-category="indmad">Indmad</button>
+      <button type="button" class="toggle-btn category-btn" data-category="suppe">Suppe</button>
+      <button type="button" class="toggle-btn category-btn" data-category="vegetar">Vegetar</button>
     </div>
+  </div>
 
     <div class="field-full">
       <label>Dessert</label>
@@ -730,13 +741,30 @@ function wantsDessert(d) {
   return true;
 }
 
+let selectedCategories = [];
+
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.category-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const category = btn.dataset.category;
+
+      if (selectedCategories.includes(category)) {
+        selectedCategories = selectedCategories.filter(c => c !== category);
+        btn.classList.remove('active');
+      } else {
+        selectedCategories.push(category);
+        btn.classList.add('active');
+      }
+    });
+  });
+});
+
 function generateMenu() {
   const weeks = parseInt(document.getElementById('weeks').value);
   const persons = document.getElementById('persons').value;
   const avoidRaw = document.getElementById('avoid').value.toLowerCase().trim();
   const avoid = avoidRaw ? avoidRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
-  const avoidCategoriesRaw = document.getElementById('avoidCategories').value.toLowerCase().trim();
-  const avoidCategories = avoidCategoriesRaw ? avoidCategoriesRaw.split(',').map(s => s.trim()).filter(Boolean) : [];
+  const avoidCategories = [...selectedCategories];
 
   const isMale = persons.includes('m');
   const numPersons = persons.startsWith('2') ? 2 : 1;
