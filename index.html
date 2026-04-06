@@ -2852,6 +2852,8 @@ function generateMenu() {
   const frugtM = "4–5 frugter/dag (mindst 1 fra gruppe 1)";
   const frugtTekst = mixed ? `Kvinde: ${frugtK} · Mand: ${frugtM}` : isMale ? frugtM : frugtK;
 
+  html += renderShoppingList(days, weeks);
+
   html += `<div class="info-bar">
     <strong>Husk dagligt:</strong> ½ liter mælkeprodukt (fordelt over dagen) · ${frugtTekst} · 15g fedtstof (råt) · 2 liter vand · Ingen alkohol eller sukker<br>
     ${dessertMode !== 'ingen' ? '<strong>Dessert:</strong> Tæller som en del af din daglige frugtkvote – planlæg resten af dagen derefter.' : ''}
@@ -2862,14 +2864,6 @@ function generateMenu() {
       Ny tilfældig plan
     </button>
   </div>`;
-
-  html += renderShoppingList(days, weeks);
-
-  html += `<div class="info-bar">
-    <strong>Husk dagligt:</strong> ½ liter mælkeprodukt (fordelt over dagen) · ${frugtTekst} · 15g fedtstof (råt) · 2 liter vand · Ingen alkohol eller sukker<br>
-    ${dessertMode !== 'ingen' ? '<strong>Dessert:</strong> Tæller som en del af din daglige frugtkvote – planlæg resten af dagen derefter.' : ''}
-  </div>
-  <div style="text-align:center; padding: 0.5rem 0 1rem;">
 
   document.getElementById('output').innerHTML = html;
   document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'start' });
