@@ -433,6 +433,61 @@ main {
   }
 }
 
+.shopping-card {
+  background: var(--white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.25rem 1.5rem;
+  margin-top: 1.25rem;
+}
+
+.shopping-title {
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-light);
+  margin-bottom: 0.9rem;
+}
+
+.shopping-section {
+  margin-bottom: 1rem;
+}
+
+.shopping-section:last-child {
+  margin-bottom: 0;
+}
+
+.shopping-week {
+  font-family: 'Playfair Display', serif;
+  font-size: 1.1rem;
+  color: var(--green);
+  margin-bottom: 0.6rem;
+}
+
+.shopping-list {
+  display: grid;
+  gap: 0.45rem;
+}
+
+.shopping-item {
+  padding: 0.55rem 0.7rem;
+  background: #fafaf8;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+
+.shopping-item-name {
+  font-weight: 600;
+  color: var(--text);
+}
+
+.shopping-item-meta {
+  font-size: 0.78rem;
+  color: var(--text-light);
+  margin-top: 2px;
+}
+
   footer {
     text-align: center;
     padding: 1.5rem;
@@ -2558,6 +2613,75 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 
+function normalizeIngredientName(name) {
+  return String(name || "").toLowerCase().trim();
+}
+
+function collectShoppingForDays(daysSlice) {
+  const shoppingMap = new Map();
+
+  for (const day of daysSlice) {
+    const meals = [
+      { label: "Morgenmad", item: day.breakfast },
+      { label: "Frokost", item: day.lunch },
+      { label: "Middag", item: day.dinner },
+      { label: "Dessert", item: day.dessert }
+    ];
+
+    for (const meal of meals) {
+      if (!meal.item || !meal.item.ingredients) continue;
+
+      for (const ingredient of meal.item.ingredients) {
+        const key = normalizeIngredientName(ingredient);
+        if (!key) continue;
+
+        if (!shoppingMap.has(key)) {
+          shoppingMap.set(key, {
+            name: ingredient,
+            count: 0,
+            usedIn: new Set()
+          });
+        }
+
+        const entry = shoppingMap.get(key);
+        entry.count += 1;
+        entry.usedIn.add(`${meal.label}: ${meal.item.name}`);
+      }
+    }
+  }
+
+  return [...shoppingMap.values()].sort((a, b) => a.name.localeCompare(b.name, 'da'));
+}
+
+function renderShoppingList(days, weeks) {
+  let html = `<div class="shopping-card">
+    <div class="shopping-title">Indkøbsliste (oversigt)</div>`;
+
+  for (let w = 0; w < weeks; w++) {
+    const weekDays = days.slice(w * 7, w * 7 + 7);
+    const shoppingItems = collectShoppingForDays(weekDays);
+
+    html += `<div class="shopping-section">
+      <div class="shopping-week">${weeks > 1 ? `Uge ${w + 1}` : 'Denne uge'}</div>
+      <div class="shopping-list">`;
+
+    for (const item of shoppingItems) {
+      const usedIn = [...item.usedIn].slice(0, 3).join(" · ");
+      const extraCount = item.usedIn.size > 3 ? ` · +${item.usedIn.size - 3} flere` : "";
+
+      html += `<div class="shopping-item">
+        <div class="shopping-item-name">${item.name}</div>
+        <div class="shopping-item-meta">Bruges ${item.count} gang(e) · ${usedIn}${extraCount}</div>
+      </div>`;
+    }
+
+    html += `</div></div>`;
+  }
+
+  html += `</div>`;
+  return html;
+}
+
 function generateMenu() {
   const weeks = parseInt(document.getElementById('weeks').value);
   const persons = document.getElementById('persons').value;
@@ -2738,6 +2862,14 @@ function generateMenu() {
       Ny tilfældig plan
     </button>
   </div>`;
+
+  html += renderShoppingList(days, weeks);
+
+  html += `<div class="info-bar">
+    <strong>Husk dagligt:</strong> ½ liter mælkeprodukt (fordelt over dagen) · ${frugtTekst} · 15g fedtstof (råt) · 2 liter vand · Ingen alkohol eller sukker<br>
+    ${dessertMode !== 'ingen' ? '<strong>Dessert:</strong> Tæller som en del af din daglige frugtkvote – planlæg resten af dagen derefter.' : ''}
+  </div>
+  <div style="text-align:center; padding: 0.5rem 0 1rem;">
 
   document.getElementById('output').innerHTML = html;
   document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'start' });
