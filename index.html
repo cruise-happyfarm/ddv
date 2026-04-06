@@ -2423,6 +2423,104 @@ function filterOut(list, avoidIngredients, avoidCategories = []) {
   });
 }
 
+function normalizeList(arr = []) {
+  return arr.map(x => String(x).toLowerCase().trim());
+}
+
+function overlapCount(a = [], b = []) {
+  const setB = new Set(normalizeList(b));
+  return normalizeList(a).filter(x => setB.has(x)).length;
+}
+
+function weightedPick(scoredItems) {
+  const total = scoredItems.reduce((sum, entry) => sum + entry.score, 0);
+  let r = Math.random() * total;
+
+  for (const entry of scoredItems) {
+    r -= entry.score;
+    if (r <= 0) return entry.item;
+  }
+
+  return scoredItems[scoredItems.length - 1].item;
+}
+
+function pickSmartDinner(list, used) {
+  let avail = list.filter(x => !used.has(x.name));
+  if (!avail.length) avail = [...list];
+
+  const scored = avail.map(item => {
+    let score = 10;
+
+    if (item.dinnerLeftoverFriendly) score += 8;
+    if ((item.leftoverUse || []).includes("madpakke")) score += 3;
+    if ((item.leftoverUse || []).includes("frokost")) score += 3;
+
+    return { item, score };
+  });
+
+  const chosen = weightedPick(scored);
+  used.add(chosen.name);
+  return chosen;
+}
+
+function pickSmartLunch(list, used, prevDinner, prevLunch) {
+  let avail = list.filter(x => !used.has(x.name));
+  if (!avail.length) avail = [...list];
+
+  const scored = avail.map(item => {
+    let score = 10;
+
+    if (item.batchFriendly) score += 3;
+
+    if (prevLunch && item.name === prevLunch.name) {
+      score -= 100;
+    }
+
+    if (prevDinner && prevDinner.dinnerLeftoverFriendly) {
+      const dinnerCarry = prevDinner.leftoverProtein || [];
+      const lunchNeeds = item.leftoverProtein || [];
+      const lunchProtein = item.protein || [];
+
+      const directMatch = overlapCount(lunchNeeds, dinnerCarry);
+      const proteinMatch = overlapCount(lunchProtein, dinnerCarry);
+
+      if (directMatch > 0) score += 40 * directMatch;
+      if (proteinMatch > 0) score += 20 * proteinMatch;
+    }
+
+    if (score < 1) score = 1;
+
+    return { item, score };
+  });
+
+  const chosen = weightedPick(scored);
+  used.add(chosen.name);
+  return chosen;
+}
+
+function getLunchPlanningNote(lunch, prevDinner, batchNote = "") {
+  const notes = [];
+
+  if (batchNote) {
+    notes.push(batchNote);
+  }
+
+  if (prevDinner && prevDinner.dinnerLeftoverFriendly) {
+    const dinnerCarry = prevDinner.leftoverProtein || [];
+    const lunchNeeds = lunch.leftoverProtein || [];
+    const lunchProtein = lunch.protein || [];
+
+    const directMatch = overlapCount(lunchNeeds, dinnerCarry);
+    const proteinMatch = overlapCount(lunchProtein, dinnerCarry);
+
+    if (directMatch > 0 || proteinMatch > 0) {
+      notes.push("matcher gårsdagens middag");
+    }
+  }
+
+  return notes.length ? `<div class="meal-meta">${notes.join(" · ")}</div>` : "";
+}
+
 function pickUnique(list, used, count) {
   let avail = list.filter(x => !used.has(x.name));
   if (avail.length < count) avail = [...list];
@@ -2472,20 +2570,72 @@ function generateMenu() {
   const mixed = persons === '2mk';
   const totalDays = weeks * 7;
 
-  const fM  = filterOut(MORGENMAD, avoid, avoidCategories);
-  const fF  = filterOut(FROKOST, avoid, avoidCategories);
-  const fS  = filterOut(SUPPER, avoid, avoidCategories);
-  const fD  = filterOut(MIDDAG, avoid, avoidCategories);
+  const fM   = filterOut(MORGENMAD, avoid, avoidCategories);
+  const fF   = filterOut(FROKOST, avoid, avoidCategories);
+  const fS   = filterOut(SUPPER, avoid, avoidCategories);
+  const fD   = filterOut(MIDDAG, avoid, avoidCategories);
   const fDes = filterOut(DESSERT, avoid, avoidCategories);
 
-  const frokostPool = shuffle([...fF, ...fS.slice(0, Math.ceil(fS.length/2))]);
-  const middagPool  = shuffle([...fD, ...fS.slice(Math.ceil(fS.length/2))]);
+  if (!fM.length || !fF.length || !fD.length || !fDes.length) {
+    document.getElementById('output').innerHTML = `
+      <div class="avoid-bar">
+        Filtreringen blev for stram. Prøv at fjerne nogle ingredienser eller kategorier.
+      </div>
+    `;
+    return;
+  }
 
-  const usedM = new Set(), usedF = new Set(), usedD = new Set(), usedDes = new Set();
+  const frokostPool = shuffle([...fF, ...fS.slice(0, Math.ceil(fS.length / 2))]);
+  const middagPool  = shuffle([...fD, ...fS.slice(Math.ceil(fS.length / 2))]);
+
+  const usedM = new Set();
+  const usedL = new Set();
+  const usedD = new Set();
+  const usedDes = new Set();
+
   const morgenList  = pickUnique(fM, usedM, totalDays);
-  const frokostList = pickUnique(frokostPool, usedF, totalDays);
-  const middagList  = pickUnique(middagPool, usedD, totalDays);
   const dessertList = pickUnique(fDes, usedDes, totalDays);
+
+  const days = [];
+  let activeLunchBatch = null;
+
+  for (let idx = 0; idx < totalDays; idx++) {
+    const prevDinner = idx > 0 ? days[idx - 1].dinner : null;
+    const prevLunch  = idx > 0 ? days[idx - 1].lunch : null;
+
+    const breakfast = morgenList[idx % morgenList.length];
+    const dessert = wantsDessert(idx % 7) ? dessertList[idx % dessertList.length] : null;
+
+    let lunch;
+    let lunchBatchNote = "";
+
+    if (activeLunchBatch && activeLunchBatch.remaining > 0) {
+      lunch = activeLunchBatch.item;
+      activeLunchBatch.remaining -= 1;
+      lunchBatchNote = "samme frokost som i går";
+    } else {
+      lunch = pickSmartLunch(frokostPool, usedL, prevDinner, prevLunch);
+
+      if (lunch.batchFriendly && lunch.batchDays > 1) {
+        activeLunchBatch = {
+          item: lunch,
+          remaining: lunch.batchDays - 1
+        };
+      } else {
+        activeLunchBatch = null;
+      }
+    }
+
+    const dinner = pickSmartDinner(middagPool, usedD);
+
+    days.push({
+      breakfast,
+      lunch,
+      dinner,
+      dessert,
+      lunchBatchNote
+    });
+  }
 
   let html = '';
 
@@ -2494,27 +2644,33 @@ function generateMenu() {
   }
 
   for (let w = 0; w < weeks; w++) {
-    if (weeks > 1) html += `<div class="week-label">Uge ${w+1}</div>`;
+    if (weeks > 1) html += `<div class="week-label">Uge ${w + 1}</div>`;
 
     for (let d = 0; d < 7; d++) {
-      const idx = w*7 + d;
-      const m   = morgenList[idx % morgenList.length];
-      const f   = frokostList[idx % frokostList.length];
-      const di  = middagList[idx % middagList.length];
-      const des = wantsDessert(d) ? dessertList[idx % dessertList.length] : null;
+      const idx = w * 7 + d;
+      const day = days[idx];
+
+      const m = day.breakfast;
+      const f = day.lunch;
+      const di = day.dinner;
+      const des = day.dessert;
+
+      const prevDinner = idx > 0 ? days[idx - 1].dinner : null;
+      const lunchPlanNote = getLunchPlanningNote(f, prevDinner, day.lunchBatchNote);
 
       const isSupF = SUPPE_NAMES.has(f.name);
       const isSupD = SUPPE_NAMES.has(di.name);
 
       let badges = '';
       if (mixed) badges = `<span class="badge badge-m">Mand</span><span class="badge badge-k">Kvinde</span>`;
-      else if (isMale && numPersons===2) badges = `<span class="badge badge-m">2 mænd</span>`;
-      else if (!isMale && numPersons===2) badges = `<span class="badge badge-k">2 kvinder</span>`;
+      else if (isMale && numPersons === 2) badges = `<span class="badge badge-m">2 mænd</span>`;
+      else if (!isMale && numPersons === 2) badges = `<span class="badge badge-k">2 kvinder</span>`;
       else if (isMale) badges = `<span class="badge badge-m">Mand</span>`;
       else badges = `<span class="badge badge-k">Kvinde</span>`;
 
       let froMeta, midMeta;
-      const pp = numPersons===2 ? ' (per person)' : '';
+      const pp = numPersons === 2 ? ' (per person)' : '';
+
       if (mixed) {
         froMeta = `Mand: 80-120g protein · 200-300g grønt · 60g brød<br>Kvinde: 80-120g protein · 200-300g grønt · 30g brød`;
         midMeta = `Mand: 170-220g protein · 200-300g grønt<br>Kvinde: 120-170g protein · 200-300g grønt`;
@@ -2531,6 +2687,7 @@ function generateMenu() {
           <span class="day-name">${DAYS[d]}</span>
           <div class="badges">${badges}</div>
         </div>
+
         <div class="meal-row">
           <div class="meal-label">Morgenmad</div>
           <div class="meal-content">
@@ -2538,13 +2695,16 @@ function generateMenu() {
             <div class="meal-meta">1 æg / ost / 30g morgenmadsprod. · 1 frugt · 30g brød</div>
           </div>
         </div>
+
         <div class="meal-row">
           <div class="meal-label">Frokost</div>
           <div class="meal-content">
             <a href="${f.url}" target="_blank">${f.name}</a>${isSupF ? '<span class="suppe-tag">suppe</span>' : ''}
             <div class="meal-meta">${froMeta}</div>
+            ${lunchPlanNote}
           </div>
         </div>
+
         <div class="meal-row">
           <div class="meal-label">Middag</div>
           <div class="meal-content">
@@ -2552,6 +2712,7 @@ function generateMenu() {
             <div class="meal-meta">${midMeta}</div>
           </div>
         </div>
+
         ${des ? `<div class="meal-row dessert-row">
           <div class="meal-label">Dessert</div>
           <div class="meal-content">
@@ -2581,6 +2742,7 @@ function generateMenu() {
   document.getElementById('output').innerHTML = html;
   document.getElementById('output').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
+
 </script>
 </body>
 </html>
